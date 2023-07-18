@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from d:\Projects\.Net\StellarisTechTree\TestApp\Stellaris.g4 by ANTLR 4.9.2
+// Generated from d:\Projects\.Net\StellarisTechTree\src\StellarisTechTree.WebApp\Stellaris.g4 by ANTLR 4.9.2
 
 // Unreachable code detected
 #pragma warning disable 0162

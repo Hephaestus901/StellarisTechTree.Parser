@@ -1,6 +1,15 @@
+using StellarisTechTree.Application.Services;
+using StellarisTechTree.Domain.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+// singletons
+builder.Services.AddSingleton<IVariableService, VariableService>();
+builder.Services.AddSingleton<IFileService, FileService>();
+// scoped
+builder.Services.AddScoped<IVisitorFactory, VisitorFactory>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
