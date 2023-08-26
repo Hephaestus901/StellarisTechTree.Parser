@@ -19,20 +19,17 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
-using System;
-using System.IO;
-using System.Text;
-using System.Diagnostics;
-using System.Collections.Generic;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Atn;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using DFA = Antlr4.Runtime.Dfa.DFA;
 
+namespace StellarisTechTree.Infrastructure.Antlr.Stellaris;
+
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.9.2")]
 [System.CLSCompliant(false)]
-public partial class StellarisParser : Parser {
+public partial class StellarisParser : Antlr4.Runtime.Parser {
 	protected static DFA[] decisionToDFA;
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
@@ -76,9 +73,9 @@ public partial class StellarisParser : Parser {
 		}
 	}
 
-		public StellarisParser(ITokenStream input) : this(input, Console.Out, Console.Error) { }
+	public StellarisParser(ITokenStream input) : this(input, Console.Out, Console.Error) { }
 
-		public StellarisParser(ITokenStream input, TextWriter output, TextWriter errorOutput)
+	public StellarisParser(ITokenStream input, TextWriter output, TextWriter errorOutput)
 		: base(input, output, errorOutput)
 	{
 		Interpreter = new ParserATNSimulator(this, _ATN, decisionToDFA, sharedContextCache);
@@ -86,16 +83,16 @@ public partial class StellarisParser : Parser {
 
 	public partial class FileContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public PairContext[] pair() {
-			return GetRuleContexts<PairContext>();
+			return this.GetRuleContexts<PairContext>();
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public PairContext pair(int i) {
-			return GetRuleContext<PairContext>(i);
+			return this.GetRuleContext<PairContext>(i);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public VarContext[] var() {
-			return GetRuleContexts<VarContext>();
+			return this.GetRuleContexts<VarContext>();
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public VarContext var(int i) {
-			return GetRuleContext<VarContext>(i);
+			return this.GetRuleContext<VarContext>(i);
 		}
 		public FileContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -113,39 +110,39 @@ public partial class StellarisParser : Parser {
 	[RuleVersion(0)]
 	public FileContext file() {
 		FileContext _localctx = new FileContext(Context, State);
-		EnterRule(_localctx, 0, RULE_file);
+		this.EnterRule(_localctx, 0, RULE_file);
 		int _la;
 		try {
-			EnterOuterAlt(_localctx, 1);
+			this.EnterOuterAlt(_localctx, 1);
 			{
-			State = 16;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			while (_la==VARIABLE || _la==BAREWORD) {
-				{
-				State = 14;
-				ErrorHandler.Sync(this);
-				switch (TokenStream.LA(1)) {
-				case BAREWORD:
-					{
-					State = 12;
-					pair();
-					}
-					break;
-				case VARIABLE:
-					{
-					State = 13;
-					var();
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				}
-				State = 18;
+				State = 16;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-			}
+				while (_la==VARIABLE || _la==BAREWORD) {
+					{
+						State = 14;
+						ErrorHandler.Sync(this);
+						switch (TokenStream.LA(1)) {
+							case BAREWORD:
+							{
+								State = 12;
+								pair();
+							}
+								break;
+							case VARIABLE:
+							{
+								State = 13;
+								var();
+							}
+								break;
+							default:
+								throw new NoViableAltException(this);
+						}
+					}
+					State = 18;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				}
 			}
 		}
 		catch (RecognitionException re) {
@@ -154,17 +151,17 @@ public partial class StellarisParser : Parser {
 			ErrorHandler.Recover(this, re);
 		}
 		finally {
-			ExitRule();
+			this.ExitRule();
 		}
 		return _localctx;
 	}
 
 	public partial class MapContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public PairContext[] pair() {
-			return GetRuleContexts<PairContext>();
+			return this.GetRuleContexts<PairContext>();
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public PairContext pair(int i) {
-			return GetRuleContext<PairContext>(i);
+			return this.GetRuleContext<PairContext>(i);
 		}
 		public MapContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -182,29 +179,29 @@ public partial class StellarisParser : Parser {
 	[RuleVersion(0)]
 	public MapContext map() {
 		MapContext _localctx = new MapContext(Context, State);
-		EnterRule(_localctx, 2, RULE_map);
+		this.EnterRule(_localctx, 2, RULE_map);
 		int _la;
 		try {
-			EnterOuterAlt(_localctx, 1);
+			this.EnterOuterAlt(_localctx, 1);
 			{
-			State = 19;
-			Match(T__0);
-			State = 23;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			while (_la==BAREWORD) {
-				{
-				{
-				State = 20;
-				pair();
-				}
-				}
-				State = 25;
+				State = 19;
+				this.Match(T__0);
+				State = 23;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-			}
-			State = 26;
-			Match(T__1);
+				while (_la==BAREWORD) {
+					{
+						{
+							State = 20;
+							pair();
+						}
+					}
+					State = 25;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				}
+				State = 26;
+				this.Match(T__1);
 			}
 		}
 		catch (RecognitionException re) {
@@ -213,16 +210,16 @@ public partial class StellarisParser : Parser {
 			ErrorHandler.Recover(this, re);
 		}
 		finally {
-			ExitRule();
+			this.ExitRule();
 		}
 		return _localctx;
 	}
 
 	public partial class PairContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BAREWORD() { return GetToken(StellarisParser.BAREWORD, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SPECIFIER() { return GetToken(StellarisParser.SPECIFIER, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BAREWORD() { return this.GetToken(StellarisParser.BAREWORD, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SPECIFIER() { return this.GetToken(StellarisParser.SPECIFIER, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ValueContext value() {
-			return GetRuleContext<ValueContext>(0);
+			return this.GetRuleContext<ValueContext>(0);
 		}
 		public PairContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -240,16 +237,16 @@ public partial class StellarisParser : Parser {
 	[RuleVersion(0)]
 	public PairContext pair() {
 		PairContext _localctx = new PairContext(Context, State);
-		EnterRule(_localctx, 4, RULE_pair);
+		this.EnterRule(_localctx, 4, RULE_pair);
 		try {
-			EnterOuterAlt(_localctx, 1);
+			this.EnterOuterAlt(_localctx, 1);
 			{
-			State = 28;
-			Match(BAREWORD);
-			State = 29;
-			Match(SPECIFIER);
-			State = 30;
-			value();
+				State = 28;
+				this.Match(BAREWORD);
+				State = 29;
+				this.Match(SPECIFIER);
+				State = 30;
+				value();
 			}
 		}
 		catch (RecognitionException re) {
@@ -258,15 +255,15 @@ public partial class StellarisParser : Parser {
 			ErrorHandler.Recover(this, re);
 		}
 		finally {
-			ExitRule();
+			this.ExitRule();
 		}
 		return _localctx;
 	}
 
 	public partial class VarContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VARIABLE() { return GetToken(StellarisParser.VARIABLE, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SPECIFIER() { return GetToken(StellarisParser.SPECIFIER, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUMBER() { return GetToken(StellarisParser.NUMBER, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VARIABLE() { return this.GetToken(StellarisParser.VARIABLE, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SPECIFIER() { return this.GetToken(StellarisParser.SPECIFIER, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUMBER() { return this.GetToken(StellarisParser.NUMBER, 0); }
 		public VarContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -283,16 +280,16 @@ public partial class StellarisParser : Parser {
 	[RuleVersion(0)]
 	public VarContext var() {
 		VarContext _localctx = new VarContext(Context, State);
-		EnterRule(_localctx, 6, RULE_var);
+		this.EnterRule(_localctx, 6, RULE_var);
 		try {
-			EnterOuterAlt(_localctx, 1);
+			this.EnterOuterAlt(_localctx, 1);
 			{
-			State = 32;
-			Match(VARIABLE);
-			State = 33;
-			Match(SPECIFIER);
-			State = 34;
-			Match(NUMBER);
+				State = 32;
+				this.Match(VARIABLE);
+				State = 33;
+				this.Match(SPECIFIER);
+				State = 34;
+				this.Match(NUMBER);
 			}
 		}
 		catch (RecognitionException re) {
@@ -301,17 +298,17 @@ public partial class StellarisParser : Parser {
 			ErrorHandler.Recover(this, re);
 		}
 		finally {
-			ExitRule();
+			this.ExitRule();
 		}
 		return _localctx;
 	}
 
 	public partial class ArrayContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ValueContext[] value() {
-			return GetRuleContexts<ValueContext>();
+			return this.GetRuleContexts<ValueContext>();
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ValueContext value(int i) {
-			return GetRuleContext<ValueContext>(i);
+			return this.GetRuleContext<ValueContext>(i);
 		}
 		public ArrayContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -329,29 +326,29 @@ public partial class StellarisParser : Parser {
 	[RuleVersion(0)]
 	public ArrayContext array() {
 		ArrayContext _localctx = new ArrayContext(Context, State);
-		EnterRule(_localctx, 8, RULE_array);
+		this.EnterRule(_localctx, 8, RULE_array);
 		int _la;
 		try {
-			EnterOuterAlt(_localctx, 1);
+			this.EnterOuterAlt(_localctx, 1);
 			{
-			State = 36;
-			Match(T__0);
-			State = 38;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			do {
-				{
-				{
-				State = 37;
-				value();
-				}
-				}
-				State = 40;
+				State = 36;
+				this.Match(T__0);
+				State = 38;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__0) | (1L << BOOLEAN) | (1L << VARIABLE) | (1L << NUMBER) | (1L << DATE) | (1L << BAREWORD) | (1L << STRING))) != 0) );
-			State = 42;
-			Match(T__1);
+				do {
+					{
+						{
+							State = 37;
+							value();
+						}
+					}
+					State = 40;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__0) | (1L << BOOLEAN) | (1L << VARIABLE) | (1L << NUMBER) | (1L << DATE) | (1L << BAREWORD) | (1L << STRING))) != 0) );
+				State = 42;
+				this.Match(T__1);
 			}
 		}
 		catch (RecognitionException re) {
@@ -360,23 +357,23 @@ public partial class StellarisParser : Parser {
 			ErrorHandler.Recover(this, re);
 		}
 		finally {
-			ExitRule();
+			this.ExitRule();
 		}
 		return _localctx;
 	}
 
 	public partial class ValueContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUMBER() { return GetToken(StellarisParser.NUMBER, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BOOLEAN() { return GetToken(StellarisParser.BOOLEAN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DATE() { return GetToken(StellarisParser.DATE, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING() { return GetToken(StellarisParser.STRING, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VARIABLE() { return GetToken(StellarisParser.VARIABLE, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BAREWORD() { return GetToken(StellarisParser.BAREWORD, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUMBER() { return this.GetToken(StellarisParser.NUMBER, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BOOLEAN() { return this.GetToken(StellarisParser.BOOLEAN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DATE() { return this.GetToken(StellarisParser.DATE, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING() { return this.GetToken(StellarisParser.STRING, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VARIABLE() { return this.GetToken(StellarisParser.VARIABLE, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BAREWORD() { return this.GetToken(StellarisParser.BAREWORD, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public MapContext map() {
-			return GetRuleContext<MapContext>(0);
+			return this.GetRuleContext<MapContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ArrayContext array() {
-			return GetRuleContext<ArrayContext>(0);
+			return this.GetRuleContext<ArrayContext>(0);
 		}
 		public ValueContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -394,67 +391,67 @@ public partial class StellarisParser : Parser {
 	[RuleVersion(0)]
 	public ValueContext value() {
 		ValueContext _localctx = new ValueContext(Context, State);
-		EnterRule(_localctx, 10, RULE_value);
+		this.EnterRule(_localctx, 10, RULE_value);
 		try {
 			State = 52;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,4,Context) ) {
-			case 1:
-				EnterOuterAlt(_localctx, 1);
+				case 1:
+					this.EnterOuterAlt(_localctx, 1);
 				{
-				State = 44;
-				Match(NUMBER);
+					State = 44;
+					this.Match(NUMBER);
 				}
-				break;
-			case 2:
-				EnterOuterAlt(_localctx, 2);
+					break;
+				case 2:
+					this.EnterOuterAlt(_localctx, 2);
 				{
-				State = 45;
-				Match(BOOLEAN);
+					State = 45;
+					this.Match(BOOLEAN);
 				}
-				break;
-			case 3:
-				EnterOuterAlt(_localctx, 3);
+					break;
+				case 3:
+					this.EnterOuterAlt(_localctx, 3);
 				{
-				State = 46;
-				Match(DATE);
+					State = 46;
+					this.Match(DATE);
 				}
-				break;
-			case 4:
-				EnterOuterAlt(_localctx, 4);
+					break;
+				case 4:
+					this.EnterOuterAlt(_localctx, 4);
 				{
-				State = 47;
-				Match(STRING);
+					State = 47;
+					this.Match(STRING);
 				}
-				break;
-			case 5:
-				EnterOuterAlt(_localctx, 5);
+					break;
+				case 5:
+					this.EnterOuterAlt(_localctx, 5);
 				{
-				State = 48;
-				Match(VARIABLE);
+					State = 48;
+					this.Match(VARIABLE);
 				}
-				break;
-			case 6:
-				EnterOuterAlt(_localctx, 6);
+					break;
+				case 6:
+					this.EnterOuterAlt(_localctx, 6);
 				{
-				State = 49;
-				Match(BAREWORD);
+					State = 49;
+					this.Match(BAREWORD);
 				}
-				break;
-			case 7:
-				EnterOuterAlt(_localctx, 7);
+					break;
+				case 7:
+					this.EnterOuterAlt(_localctx, 7);
 				{
-				State = 50;
-				map();
+					State = 50;
+					map();
 				}
-				break;
-			case 8:
-				EnterOuterAlt(_localctx, 8);
+					break;
+				case 8:
+					this.EnterOuterAlt(_localctx, 8);
 				{
-				State = 51;
-				array();
+					State = 51;
+					array();
 				}
-				break;
+					break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -463,7 +460,7 @@ public partial class StellarisParser : Parser {
 			ErrorHandler.Recover(this, re);
 		}
 		finally {
-			ExitRule();
+			this.ExitRule();
 		}
 		return _localctx;
 	}

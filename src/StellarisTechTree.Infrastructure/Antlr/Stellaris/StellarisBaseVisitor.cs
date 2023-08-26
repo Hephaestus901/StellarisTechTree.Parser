@@ -24,6 +24,8 @@ using Antlr4.Runtime.Tree;
 using IToken = Antlr4.Runtime.IToken;
 using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 
+namespace StellarisTechTree.Infrastructure.Antlr.Stellaris;
+
 /// <summary>
 /// This class provides an empty implementation of <see cref="IStellarisVisitor{Result}"/>,
 /// which can be extended to create a visitor which only needs to handle a subset
@@ -43,7 +45,7 @@ public partial class StellarisBaseVisitor<Result> : AbstractParseTreeVisitor<Res
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitFile([NotNull] StellarisParser.FileContext context) { return VisitChildren(context); }
+	public virtual Result VisitFile([NotNull] StellarisParser.FileContext context) { return this.VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="StellarisParser.map"/>.
 	/// <para>
@@ -53,7 +55,7 @@ public partial class StellarisBaseVisitor<Result> : AbstractParseTreeVisitor<Res
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitMap([NotNull] StellarisParser.MapContext context) { return VisitChildren(context); }
+	public virtual Result VisitMap([NotNull] StellarisParser.MapContext context) { return this.VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="StellarisParser.pair"/>.
 	/// <para>
@@ -63,7 +65,7 @@ public partial class StellarisBaseVisitor<Result> : AbstractParseTreeVisitor<Res
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitPair([NotNull] StellarisParser.PairContext context) { return VisitChildren(context); }
+	public virtual Result VisitPair([NotNull] StellarisParser.PairContext context) { return this.VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="StellarisParser.var"/>.
 	/// <para>
@@ -73,7 +75,7 @@ public partial class StellarisBaseVisitor<Result> : AbstractParseTreeVisitor<Res
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitVar([NotNull] StellarisParser.VarContext context) { return VisitChildren(context); }
+	public virtual Result VisitVar([NotNull] StellarisParser.VarContext context) { return this.VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="StellarisParser.array"/>.
 	/// <para>
@@ -83,7 +85,7 @@ public partial class StellarisBaseVisitor<Result> : AbstractParseTreeVisitor<Res
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitArray([NotNull] StellarisParser.ArrayContext context) { return VisitChildren(context); }
+	public virtual Result VisitArray([NotNull] StellarisParser.ArrayContext context) { return this.VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="StellarisParser.value"/>.
 	/// <para>
@@ -93,5 +95,5 @@ public partial class StellarisBaseVisitor<Result> : AbstractParseTreeVisitor<Res
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitValue([NotNull] StellarisParser.ValueContext context) { return VisitChildren(context); }
+	public virtual Result VisitValue([NotNull] StellarisParser.ValueContext context) { return this.VisitChildren(context); }
 }

@@ -1,8 +1,8 @@
 ﻿using Antlr4.Runtime;
 using Microsoft.Extensions.Configuration;
-using StellarisTechTree.Domain.Services;
+using StellarisTechTree.Application.Services;
 
-namespace StellarisTechTree.Application.Services;
+namespace StellarisTechTree.Infrastructure.Services;
 
 public class FileService : IFileService
 {
@@ -19,15 +19,5 @@ public class FileService : IFileService
         var folderPath = configuration.GetSection($"{sectionName}:Path").Value;
         var extension = configuration.GetSection($"{sectionName}:Extension").Value;
         return Directory.GetFiles(Path.Combine(basePath!, folderPath!), $"*.{extension}");
-    }
-    
-    public StellarisParser.FileContext GetFileContext(string filePath)
-    {
-        var text = File.ReadAllText(filePath);
-        var inputStream = new AntlrInputStream(text);
-        var lexer = new StellarisLexer(inputStream);
-        var commonTokenStream = new CommonTokenStream(lexer);
-        var parser = new StellarisParser(commonTokenStream);
-        return parser.file();
     }
 }

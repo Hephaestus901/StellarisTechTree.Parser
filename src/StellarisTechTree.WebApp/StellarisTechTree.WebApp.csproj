@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\StellarisTechTree.Application\StellarisTechTree.Application.csproj" />
+      <ProjectReference Include="..\StellarisTechTree.Infrastructure\StellarisTechTree.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

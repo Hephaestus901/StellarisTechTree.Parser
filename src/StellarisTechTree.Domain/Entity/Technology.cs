@@ -1,56 +1,91 @@
-﻿namespace StellarisTechTree.Domain.Entity;
+﻿using System.Collections.ObjectModel;
+using System.Text.Json.Serialization;
 
-[Obsolete("Need to be finalized before usage")]
+namespace StellarisTechTree.Domain.Entity;
+
 public class Technology
 {
-    /*
-     * Technology cost
-     */
-    public int Cost { get; set; }
+    /// <summary>
+    /// society|engineering|physics
+    /// </summary>
+    public string Area { get; private set; } = string.Empty;
 
-    /*
-     * Research tree: physics, society, engineering
-     */
-    public string Area { get; set; }
+    public string Name { get; private set; }
 
-    /*
-     * Tech is researched on the game start
-     */
-    public bool IsStartTech { get; set; }
+    public decimal Cost { get; private set; }
 
-    /*
-     * Tier of technology: 1, 2, 3, 4, 5
-     */
-    public int Tier { get; set; }
+    [JsonPropertyName("start_tech")]
+    public bool IsStartTech { get; private set; }
 
-    /*
-     * Indicates that tech have rare indicator
-     */
-    public bool IsRare { get; set; }
+    [JsonPropertyName("is_rare")]
+    public bool IsRare { get; private set; }
 
-    /*
-     * Category of technology
-     */
-    public string Category { get; set; }
+    public decimal Tier { get; private set; }
 
-    /*
-     * Other technologies that's are required for this tech to be eligible to show
-     */
-    public string[] Prerequisites { get; set; }
+    public decimal Weight { get; private set; }
 
-    /*
-     * Weight of technology
-     */
-    public int Weight { get; set; }
-    
-    /*
-     * ai_update_type
-     * does only military or all empires will priorities this tech
-     */
-    public bool OnlyMilitaryType { get; set; }
+    public string Gateway { get; private set; } = string.Empty;
 
-    /*
-     * Technology that is gateway opens multiple other techs?
-     */
-    public string Gateway { get; set; }
+    public ReadOnlyCollection<string> Category { get; private set; } = new(Array.Empty<string>());
+
+    public ReadOnlyCollection<string> Prerequisites { get; private set; } = new(Array.Empty<string>());
+
+    [JsonPropertyName("weight_modifier")]
+    public Dictionary<string, object> WeightModifier { get; private set; } = new();
+
+    public Dictionary<string, object> Modifier { get; private set; } = new();
+
+    public ReadOnlyCollection<Technology> Children { get; private set; }
+
+    public Technology(KeyValuePair<string, object> techPayload)
+    {
+        Name = techPayload.Key;
+        Children = new ReadOnlyCollection<Technology>(Array.Empty<Technology>());
+        if (techPayload.Value is not Dictionary<string, object> payloadValue)
+        {
+            return;
+        }
+
+        Area = payloadValue.TryGetValue("area", out var rawArea) && rawArea is string area ? area : string.Empty;
+        Gateway = payloadValue.TryGetValue("gateway", out var rawGateway) && rawGateway is string gateway
+            ? gateway
+            : string.Empty;
+
+        IsStartTech = payloadValue.TryGetValue("start_tech", out var rawStartTech) && rawStartTech is true;
+        IsRare = payloadValue.TryGetValue("is_rare", out var rawIsRare) && rawIsRare is true;
+
+        Cost = payloadValue.TryGetValue("cost", out var rawCost) && rawCost is decimal cost ? cost : default;
+        Tier = payloadValue.TryGetValue("tier", out var rawTier) && rawTier is decimal tier ? tier : default;
+        Weight = payloadValue.TryGetValue("weight", out var rawWeight) && rawWeight is decimal weight
+            ? weight
+            : default;
+
+        Prerequisites = payloadValue.TryGetValue("prerequisites", out var rawPrereqs) && rawPrereqs is object[] prereqs
+            ? new ReadOnlyCollection<string>(prereqs.Select(x => x.ToString()!).ToArray())
+            : new ReadOnlyCollection<string>(Array.Empty<string>());
+        Category = payloadValue.TryGetValue("category", out var rawCategory) && rawCategory is object[] category
+            ? new ReadOnlyCollection<string>(category.Select(x => x.ToString()!).ToArray())
+            : new ReadOnlyCollection<string>(Array.Empty<string>());
+        WeightModifier =
+            payloadValue.TryGetValue("weight_modifier", out var rawWeightModifier) &&
+            rawWeightModifier is Dictionary<string, object> weightModifier
+                ? weightModifier
+                : new Dictionary<string, object>();
+        Modifier =
+            payloadValue.TryGetValue("modifier", out var rawModifier) &&
+            rawModifier is Dictionary<string, object> modifier
+                ? modifier
+                : new Dictionary<string, object>();
+    }
+
+    public void AddChild(Technology technology)
+    {
+        var technologyFromSameArea = technology.Area == Area;
+        var technologyWasNotAlreadyAdded = Children.All(x => x.Name != technology.Name);
+        var technologyIsNotStartingTech = !technology.IsStartTech;
+        if (technologyFromSameArea && technologyWasNotAlreadyAdded && technologyIsNotStartingTech)
+        {
+            Children = new ReadOnlyCollection<Technology>(Children.Concat(new[] { technology }).ToArray());
+        }
+    }
 }

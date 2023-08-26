@@ -1,22 +1,31 @@
-﻿using System.Globalization;
+﻿using StellarisTechTree.Application.Services;
 using StellarisTechTree.Domain.Extensions;
-using StellarisTechTree.Domain.Services;
+using StellarisTechTree.Infrastructure.Antlr.Stellaris;
 
-namespace StellarisTechTree.Domain.Parser;
+namespace StellarisTechTree.Infrastructure.Parsers;
 
 public class FileMapVisitor : StellarisBaseVisitor<Dictionary<string, object>>
 {
-    private readonly IVariableService variableService;
+    private readonly IVariableService _variableService;
+    private readonly bool _onlyVariables;
 
-    public FileMapVisitor(IVariableService variableService)
+    public FileMapVisitor(IVariableService variableService, bool onlyVariables = false)
     {
-        this.variableService = variableService;
+        _variableService = variableService;
+        _onlyVariables = onlyVariables;
     }
 
-    public override Dictionary<string, object> VisitFile(StellarisParser.FileContext context) =>
-        context.var().Length != 0 
-            ? TraverseVarFile(context.var())
-            : TraverseMapStructure(context.pair());
+    public override Dictionary<string, object> VisitFile(StellarisParser.FileContext context)
+    {
+        if (_onlyVariables)
+        {
+            return context.var().Length != 0 ? TraverseVarFile(context.var()) : new Dictionary<string, object>();
+        }
+
+        return context.pair().Length != 0
+            ? TraverseMapStructure(context.pair())
+            : TraverseVarFile(context.var());
+    }
 
     public override Dictionary<string, object> VisitMap(StellarisParser.MapContext context) =>
         TraverseMapStructure(context.pair());
@@ -24,7 +33,7 @@ public class FileMapVisitor : StellarisBaseVisitor<Dictionary<string, object>>
     private Dictionary<string, object> TraverseMapStructure(IEnumerable<StellarisParser.PairContext> pairs) =>
         pairs.Select(pCtx =>
              {
-                 var visitor = new PairVisitor(variableService);
+                 var visitor = new PairVisitor(_variableService);
                  return visitor.VisitPair(pCtx);
              })
              .GroupBy(x => x.Key)

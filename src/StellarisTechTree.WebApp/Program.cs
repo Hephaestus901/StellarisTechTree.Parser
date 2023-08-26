@@ -1,5 +1,7 @@
 using StellarisTechTree.Application.Services;
-using StellarisTechTree.Domain.Services;
+using StellarisTechTree.Infrastructure.Services;
+using StellarisTechTree.Infrastructure.Services.ContextService;
+using StellarisTechTree.Infrastructure.Services.VisitorFactory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 // singletons
 builder.Services.AddSingleton<IVariableService, VariableService>();
 builder.Services.AddSingleton<IFileService, FileService>();
+builder.Services.AddSingleton<IContextService, ContextService>();
 // scoped
-builder.Services.AddScoped<IVisitorFactory, VisitorFactory>();
+builder.Services.AddTransient<IVisitorFactory, VisitorFactory>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

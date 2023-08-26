@@ -1,4 +1,4 @@
-﻿namespace StellarisTechTree.Domain.Services;
+﻿namespace StellarisTechTree.Application.Services;
 
 public interface IVariableService
 {

@@ -1,71 +1,61 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StellarisTechTree.Application.Services;
+using StellarisTechTree.Domain.Entity;
 using StellarisTechTree.Domain.Extensions;
-using StellarisTechTree.Domain.Relations;
-using StellarisTechTree.Domain.Services;
+using StellarisTechTree.Infrastructure.Services.ContextService;
+using StellarisTechTree.Infrastructure.Services.VisitorFactory;
 
 namespace StellarisTechTree.WebApp.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("[controller]/[action]")]
 public class DataController : ControllerBase
 {
-    private readonly ILogger<DataController> logger;
-    private readonly IVisitorFactory visitorFactory;
-    private readonly IFileService fileService;
+    private readonly IVisitorFactory _visitorFactory;
+    private readonly IFileService _fileService;
+    private readonly IContextService _contextService;
 
-    public DataController(ILogger<DataController> logger, IVisitorFactory visitorFactory, IFileService fileService)
+    public DataController(IVisitorFactory visitorFactory, IFileService fileService, IContextService contextService)
     {
-        this.logger = logger;
-        this.visitorFactory = visitorFactory;
-        this.fileService = fileService;
+        this._visitorFactory = visitorFactory;
+        this._fileService = fileService;
+        _contextService = contextService;
     }
 
     [HttpGet]
-    [Route("tech")]
-    public IActionResult Tech()
+    public TechnologyRoot Get()
     {
-        var visitor = visitorFactory.GetFileMapVisitor();
-        var files = fileService.GetFiles("Technologies");
-        var result = files.Select(fileService.GetFileContext)
+        var visitor = _visitorFactory.GetFileMapVisitor();
+        var files = _fileService.GetFiles("Technologies");
+        var result = files.Select(_contextService.GetFileContext)
                           .Select(visitor.VisitFile)
                           .Aggregate(new Dictionary<string, object>(), (result, value) => result.ConcatDict(value));
+        
+        var typedResult = result.Where(x => x.Value is Dictionary<string, object>)
+                                .Select(x => new Technology(x))
+                                .ToList();
 
-        return this.Ok(result);
+        var technologyRoot = new TechnologyRoot(typedResult);
+
+        return technologyRoot;
     }
 
-    [HttpGet]
-    [Route("relations")]
-    public IActionResult Connections()
+    [HttpGet("{area}")]
+    public TechnologyRoot ByArea(string area)
     {
-        var visitor = visitorFactory.GetFileMapVisitor();
-        var files = fileService.GetFiles("Technologies");
-        var result = files.Select(fileService.GetFileContext)
+        var visitor = _visitorFactory.GetFileMapVisitor();
+        var files = _fileService.GetFiles("Technologies");
+        var result = files.Select(_contextService.GetFileContext)
                           .Select(visitor.VisitFile)
                           .Aggregate(new Dictionary<string, object>(), (result, value) => result.ConcatDict(value));
-        // TODO: Extract
-        var nodes = result.Select(x =>
-        {
-            var dictValue = (Dictionary<string, object>)x.Value;
-            var isStarting = dictValue.TryGetValue("start_tech", out var value) && (bool)value;
-            return new RelationNode(x.Key, isStarting);
-        }).ToList();
-        foreach (var x in result)
-        {
-            var existingNode = nodes.First(n => n.Name == x.Key);
-            var dictValue = (Dictionary<string, object>)x.Value;
-            if (!dictValue.ContainsKey("prerequisites") || dictValue["prerequisites"] is not object[])
-            {
-                continue;
-            }
+        
+        var typedResult = result.Where(x => x.Value is Dictionary<string, object>)
+                                .Select(x => new Technology(x))
+                                .Where(x => x.Area == area)
+                                .ToList();
 
-            var rawValue = (object[])dictValue["prerequisites"];
-            foreach (var s in rawValue)
-            {
-                var childNode = nodes.FirstOrDefault(n => n.Name == s.ToString());
-                childNode?.AddChild(existingNode);
-            }
-        }
+        var technologyRoot = new TechnologyRoot(typedResult);
 
-        return this.Ok(nodes.Where(x => x.IsStartingNode).ToList());
+        return technologyRoot;
     }
 }

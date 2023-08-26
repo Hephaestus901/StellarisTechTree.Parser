@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StellarisTechTree.Domain", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StellarisTechTree.Application", "src\StellarisTechTree.Application\StellarisTechTree.Application.csproj", "{AFE9C9D2-41C1-4D5B-B894-2728BF26A0B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StellarisTechTree.Infrastructure", "src\StellarisTechTree.Infrastructure\StellarisTechTree.Infrastructure.csproj", "{42A026CE-2F66-4CD8-8A15-3F7C591CF18D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{AFE9C9D2-41C1-4D5B-B894-2728BF26A0B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFE9C9D2-41C1-4D5B-B894-2728BF26A0B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFE9C9D2-41C1-4D5B-B894-2728BF26A0B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42A026CE-2F66-4CD8-8A15-3F7C591CF18D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42A026CE-2F66-4CD8-8A15-3F7C591CF18D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42A026CE-2F66-4CD8-8A15-3F7C591CF18D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42A026CE-2F66-4CD8-8A15-3F7C591CF18D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -19,13 +19,12 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
-using System;
-using System.IO;
-using System.Text;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Atn;
 using Antlr4.Runtime.Misc;
 using DFA = Antlr4.Runtime.Dfa.DFA;
+
+namespace StellarisTechTree.Infrastructure.Antlr.Stellaris;
 
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.9.2")]
 [System.CLSCompliant(false)]
@@ -50,10 +49,10 @@ public partial class StellarisLexer : Lexer {
 
 
 	public StellarisLexer(ICharStream input)
-	: this(input, Console.Out, Console.Error) { }
+		: this(input, Console.Out, Console.Error) { }
 
 	public StellarisLexer(ICharStream input, TextWriter output, TextWriter errorOutput)
-	: base(input, output, errorOutput)
+		: base(input, output, errorOutput)
 	{
 		Interpreter = new LexerATNSimulator(this, _ATN, decisionToDFA, sharedContextCache);
 	}

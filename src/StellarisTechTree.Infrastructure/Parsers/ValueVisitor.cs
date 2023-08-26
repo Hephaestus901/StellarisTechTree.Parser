@@ -1,16 +1,16 @@
-﻿using System.Globalization;
+﻿using StellarisTechTree.Application.Services;
 using StellarisTechTree.Domain.Extensions;
-using StellarisTechTree.Domain.Services;
+using StellarisTechTree.Infrastructure.Antlr.Stellaris;
 
-namespace StellarisTechTree.Domain.Parser;
+namespace StellarisTechTree.Infrastructure.Parsers;
 
 public class ValueVisitor : StellarisBaseVisitor<object>
 {
-    private readonly IVariableService variableService;
+    private readonly IVariableService _variableService;
 
     public ValueVisitor(IVariableService variableService)
     {
-        this.variableService = variableService;
+        _variableService = variableService;
     }
     
     public override object VisitValue(StellarisParser.ValueContext context)
@@ -22,13 +22,13 @@ public class ValueVisitor : StellarisBaseVisitor<object>
 
         if (context.map() != null)
         {
-            var mapVisitor = new FileMapVisitor(variableService);
+            var mapVisitor = new FileMapVisitor(_variableService);
             return mapVisitor.VisitMap(context.map());
         }
 
         if (context.array() != null)
         {
-            var arrayVisitor = new ArrayVisitor(variableService);
+            var arrayVisitor = new ArrayVisitor(_variableService);
             return arrayVisitor.VisitArray(context.array());
         }
 
@@ -54,7 +54,7 @@ public class ValueVisitor : StellarisBaseVisitor<object>
 
         if (context.VARIABLE() != null)
         {
-            return variableService.GetVariableValue(context.VARIABLE().GetText());
+            return _variableService.GetVariableValue(context.VARIABLE().GetText());
         }
 
         return context.GetText().Replace("\"", "");
