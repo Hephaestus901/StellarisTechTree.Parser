@@ -8,32 +8,38 @@ public class Technology
     /// <summary>
     /// society|engineering|physics
     /// </summary>
-    public string Area { get; private set; } = string.Empty;
+    public string Area { get; init; } = string.Empty;
 
-    public string Name { get; private set; }
+    public string Name { get; init; }
 
-    public decimal Cost { get; private set; }
+    public decimal Cost { get; init; }
 
     [JsonPropertyName("start_tech")]
-    public bool IsStartTech { get; private set; }
+    public bool IsStartTech { get; init; }
 
     [JsonPropertyName("is_rare")]
-    public bool IsRare { get; private set; }
+    public bool IsRare { get; init; }
 
-    public decimal Tier { get; private set; }
+    public decimal Tier { get; init; }
 
-    public decimal Weight { get; private set; }
+    public decimal Weight { get; init; }
 
-    public string Gateway { get; private set; } = string.Empty;
+    public string Gateway { get; init; } = string.Empty;
+    
+    [JsonPropertyName("is_event")]
+    public bool IsEvent { get; init; }
+    
+    [JsonPropertyName("is_dangerous")]
+    public bool IsDangerous { get; init; }
 
-    public ReadOnlyCollection<string> Category { get; private set; } = new(Array.Empty<string>());
+    public ReadOnlyCollection<string> Category { get; init; } = new(Array.Empty<string>());
 
-    public ReadOnlyCollection<string> Prerequisites { get; private set; } = new(Array.Empty<string>());
+    public ReadOnlyCollection<string> Prerequisites { get; init; } = new(Array.Empty<string>());
 
     [JsonPropertyName("weight_modifier")]
-    public Dictionary<string, object> WeightModifier { get; private set; } = new();
+    public Dictionary<string, object> WeightModifier { get; init; } = new();
 
-    public Dictionary<string, object> Modifier { get; private set; } = new();
+    public Dictionary<string, object> Modifier { get; init; } = new();
 
     public ReadOnlyCollection<Technology> Children { get; private set; }
 
@@ -53,6 +59,7 @@ public class Technology
 
         IsStartTech = payloadValue.TryGetValue("start_tech", out var rawStartTech) && rawStartTech is true;
         IsRare = payloadValue.TryGetValue("is_rare", out var rawIsRare) && rawIsRare is true;
+        IsDangerous = payloadValue.TryGetValue("is_dangerous", out var rawIsDangerous) && rawIsDangerous is true;
 
         Cost = payloadValue.TryGetValue("cost", out var rawCost) && rawCost is decimal cost ? cost : default;
         Tier = payloadValue.TryGetValue("tier", out var rawTier) && rawTier is decimal tier ? tier : default;
@@ -76,6 +83,8 @@ public class Technology
             rawModifier is Dictionary<string, object> modifier
                 ? modifier
                 : new Dictionary<string, object>();
+
+        IsEvent = Prerequisites.Count == 0 && !IsStartTech && Weight == 0;
     }
 
     public void AddChild(Technology technology)
