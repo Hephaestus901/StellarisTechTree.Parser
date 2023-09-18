@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Extensions;
 using StellarisTechTree.Application.Services;
 using StellarisTechTree.Domain.Entity;
 using StellarisTechTree.Domain.Extensions;
@@ -17,13 +18,13 @@ public class DataController : ControllerBase
 
     public DataController(IVisitorFactory visitorFactory, IFileService fileService, IContextService contextService)
     {
-        this._visitorFactory = visitorFactory;
-        this._fileService = fileService;
+        _visitorFactory = visitorFactory;
+        _fileService = fileService;
         _contextService = contextService;
     }
 
     [HttpGet]
-    public TechnologyRoot Get()
+    public IEnumerable<Technology> Get()
     {
         var visitor = _visitorFactory.GetFileMapVisitor();
         var files = _fileService.GetFiles("Technologies");
@@ -37,11 +38,11 @@ public class DataController : ControllerBase
 
         var technologyRoot = new TechnologyRoot(typedResult);
 
-        return technologyRoot;
+        return technologyRoot.Tech;
     }
 
     [HttpGet("{area}")]
-    public TechnologyRoot ByArea(string area)
+    public IEnumerable<Technology> ByArea(Area area)
     {
         var visitor = _visitorFactory.GetFileMapVisitor();
         var files = _fileService.GetFiles("Technologies");
@@ -51,11 +52,11 @@ public class DataController : ControllerBase
         
         var typedResult = result.Where(x => x.Value is Dictionary<string, object>)
                                 .Select(x => new Technology(x))
-                                .Where(x => x.Area == area)
+                                .Where(x => string.Equals(x.Area, area.GetDisplayName(), StringComparison.InvariantCultureIgnoreCase))
                                 .ToList();
 
         var technologyRoot = new TechnologyRoot(typedResult);
 
-        return technologyRoot;
+        return technologyRoot.Tech;
     }
 }

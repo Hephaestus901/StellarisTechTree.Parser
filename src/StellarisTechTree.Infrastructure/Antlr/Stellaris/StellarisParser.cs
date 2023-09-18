@@ -19,17 +19,19 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
+using System.CodeDom.Compiler;
+using System.Diagnostics;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Atn;
+using Antlr4.Runtime.Dfa;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
-using DFA = Antlr4.Runtime.Dfa.DFA;
 
 namespace StellarisTechTree.Infrastructure.Antlr.Stellaris;
 
-[System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.9.2")]
-[System.CLSCompliant(false)]
-public partial class StellarisParser : Antlr4.Runtime.Parser {
+[GeneratedCode("ANTLR", "4.9.2")]
+[CLSCompliant(false)]
+public partial class StellarisParser : Parser {
 	protected static DFA[] decisionToDFA;
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
@@ -82,16 +84,16 @@ public partial class StellarisParser : Antlr4.Runtime.Parser {
 	}
 
 	public partial class FileContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public PairContext[] pair() {
+		[DebuggerNonUserCode] public PairContext[] pair() {
 			return this.GetRuleContexts<PairContext>();
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public PairContext pair(int i) {
+		[DebuggerNonUserCode] public PairContext pair(int i) {
 			return this.GetRuleContext<PairContext>(i);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public VarContext[] var() {
+		[DebuggerNonUserCode] public VarContext[] var() {
 			return this.GetRuleContexts<VarContext>();
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public VarContext var(int i) {
+		[DebuggerNonUserCode] public VarContext var(int i) {
 			return this.GetRuleContext<VarContext>(i);
 		}
 		public FileContext(ParserRuleContext parent, int invokingState)
@@ -99,7 +101,7 @@ public partial class StellarisParser : Antlr4.Runtime.Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_file; } }
-		[System.Diagnostics.DebuggerNonUserCode]
+		[DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IStellarisVisitor<TResult> typedVisitor = visitor as IStellarisVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFile(this);
@@ -157,10 +159,10 @@ public partial class StellarisParser : Antlr4.Runtime.Parser {
 	}
 
 	public partial class MapContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public PairContext[] pair() {
+		[DebuggerNonUserCode] public PairContext[] pair() {
 			return this.GetRuleContexts<PairContext>();
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public PairContext pair(int i) {
+		[DebuggerNonUserCode] public PairContext pair(int i) {
 			return this.GetRuleContext<PairContext>(i);
 		}
 		public MapContext(ParserRuleContext parent, int invokingState)
@@ -168,7 +170,7 @@ public partial class StellarisParser : Antlr4.Runtime.Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_map; } }
-		[System.Diagnostics.DebuggerNonUserCode]
+		[DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IStellarisVisitor<TResult> typedVisitor = visitor as IStellarisVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitMap(this);
@@ -216,9 +218,9 @@ public partial class StellarisParser : Antlr4.Runtime.Parser {
 	}
 
 	public partial class PairContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BAREWORD() { return this.GetToken(StellarisParser.BAREWORD, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SPECIFIER() { return this.GetToken(StellarisParser.SPECIFIER, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ValueContext value() {
+		[DebuggerNonUserCode] public ITerminalNode BAREWORD() { return this.GetToken(StellarisParser.BAREWORD, 0); }
+		[DebuggerNonUserCode] public ITerminalNode SPECIFIER() { return this.GetToken(StellarisParser.SPECIFIER, 0); }
+		[DebuggerNonUserCode] public ValueContext value() {
 			return this.GetRuleContext<ValueContext>(0);
 		}
 		public PairContext(ParserRuleContext parent, int invokingState)
@@ -226,7 +228,7 @@ public partial class StellarisParser : Antlr4.Runtime.Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_pair; } }
-		[System.Diagnostics.DebuggerNonUserCode]
+		[DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IStellarisVisitor<TResult> typedVisitor = visitor as IStellarisVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPair(this);
@@ -261,15 +263,15 @@ public partial class StellarisParser : Antlr4.Runtime.Parser {
 	}
 
 	public partial class VarContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VARIABLE() { return this.GetToken(StellarisParser.VARIABLE, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SPECIFIER() { return this.GetToken(StellarisParser.SPECIFIER, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUMBER() { return this.GetToken(StellarisParser.NUMBER, 0); }
+		[DebuggerNonUserCode] public ITerminalNode VARIABLE() { return this.GetToken(StellarisParser.VARIABLE, 0); }
+		[DebuggerNonUserCode] public ITerminalNode SPECIFIER() { return this.GetToken(StellarisParser.SPECIFIER, 0); }
+		[DebuggerNonUserCode] public ITerminalNode NUMBER() { return this.GetToken(StellarisParser.NUMBER, 0); }
 		public VarContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
 		public override int RuleIndex { get { return RULE_var; } }
-		[System.Diagnostics.DebuggerNonUserCode]
+		[DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IStellarisVisitor<TResult> typedVisitor = visitor as IStellarisVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVar(this);
@@ -304,10 +306,10 @@ public partial class StellarisParser : Antlr4.Runtime.Parser {
 	}
 
 	public partial class ArrayContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ValueContext[] value() {
+		[DebuggerNonUserCode] public ValueContext[] value() {
 			return this.GetRuleContexts<ValueContext>();
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ValueContext value(int i) {
+		[DebuggerNonUserCode] public ValueContext value(int i) {
 			return this.GetRuleContext<ValueContext>(i);
 		}
 		public ArrayContext(ParserRuleContext parent, int invokingState)
@@ -315,7 +317,7 @@ public partial class StellarisParser : Antlr4.Runtime.Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_array; } }
-		[System.Diagnostics.DebuggerNonUserCode]
+		[DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IStellarisVisitor<TResult> typedVisitor = visitor as IStellarisVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitArray(this);
@@ -363,16 +365,16 @@ public partial class StellarisParser : Antlr4.Runtime.Parser {
 	}
 
 	public partial class ValueContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NUMBER() { return this.GetToken(StellarisParser.NUMBER, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BOOLEAN() { return this.GetToken(StellarisParser.BOOLEAN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DATE() { return this.GetToken(StellarisParser.DATE, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING() { return this.GetToken(StellarisParser.STRING, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VARIABLE() { return this.GetToken(StellarisParser.VARIABLE, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BAREWORD() { return this.GetToken(StellarisParser.BAREWORD, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public MapContext map() {
+		[DebuggerNonUserCode] public ITerminalNode NUMBER() { return this.GetToken(StellarisParser.NUMBER, 0); }
+		[DebuggerNonUserCode] public ITerminalNode BOOLEAN() { return this.GetToken(StellarisParser.BOOLEAN, 0); }
+		[DebuggerNonUserCode] public ITerminalNode DATE() { return this.GetToken(StellarisParser.DATE, 0); }
+		[DebuggerNonUserCode] public ITerminalNode STRING() { return this.GetToken(StellarisParser.STRING, 0); }
+		[DebuggerNonUserCode] public ITerminalNode VARIABLE() { return this.GetToken(StellarisParser.VARIABLE, 0); }
+		[DebuggerNonUserCode] public ITerminalNode BAREWORD() { return this.GetToken(StellarisParser.BAREWORD, 0); }
+		[DebuggerNonUserCode] public MapContext map() {
 			return this.GetRuleContext<MapContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ArrayContext array() {
+		[DebuggerNonUserCode] public ArrayContext array() {
 			return this.GetRuleContext<ArrayContext>(0);
 		}
 		public ValueContext(ParserRuleContext parent, int invokingState)
@@ -380,7 +382,7 @@ public partial class StellarisParser : Antlr4.Runtime.Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_value; } }
-		[System.Diagnostics.DebuggerNonUserCode]
+		[DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IStellarisVisitor<TResult> typedVisitor = visitor as IStellarisVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitValue(this);

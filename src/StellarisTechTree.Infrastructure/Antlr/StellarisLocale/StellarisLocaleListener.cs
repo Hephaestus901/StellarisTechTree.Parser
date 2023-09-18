@@ -19,9 +19,9 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
+using System.CodeDom.Compiler;
 using Antlr4.Runtime.Misc;
-using IParseTreeListener = Antlr4.Runtime.Tree.IParseTreeListener;
-using IToken = Antlr4.Runtime.IToken;
+using Antlr4.Runtime.Tree;
 
 namespace StellarisTechTree.Infrastructure.Antlr.StellarisLocale;
 
@@ -29,8 +29,8 @@ namespace StellarisTechTree.Infrastructure.Antlr.StellarisLocale;
 /// This interface defines a complete listener for a parse tree produced by
 /// <see cref="StellarisLocaleParser"/>.
 /// </summary>
-[System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.7.2")]
-[System.CLSCompliant(false)]
+[GeneratedCode("ANTLR", "4.7.2")]
+[CLSCompliant(false)]
 public interface IStellarisLocaleListener : IParseTreeListener {
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="StellarisLocaleParser.localeFile"/>.

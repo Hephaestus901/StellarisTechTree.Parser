@@ -19,9 +19,9 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
+using System.CodeDom.Compiler;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
-using IToken = Antlr4.Runtime.IToken;
 
 namespace StellarisTechTree.Infrastructure.Antlr.Stellaris;
 
@@ -30,8 +30,8 @@ namespace StellarisTechTree.Infrastructure.Antlr.Stellaris;
 /// by <see cref="StellarisParser"/>.
 /// </summary>
 /// <typeparam name="Result">The return type of the visit operation.</typeparam>
-[System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.9.2")]
-[System.CLSCompliant(false)]
+[GeneratedCode("ANTLR", "4.9.2")]
+[CLSCompliant(false)]
 public interface IStellarisVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="StellarisParser.file"/>.

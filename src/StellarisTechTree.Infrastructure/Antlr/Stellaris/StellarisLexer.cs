@@ -19,15 +19,16 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
+using System.CodeDom.Compiler;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Atn;
+using Antlr4.Runtime.Dfa;
 using Antlr4.Runtime.Misc;
-using DFA = Antlr4.Runtime.Dfa.DFA;
 
 namespace StellarisTechTree.Infrastructure.Antlr.Stellaris;
 
-[System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.9.2")]
-[System.CLSCompliant(false)]
+[GeneratedCode("ANTLR", "4.9.2")]
+[CLSCompliant(false)]
 public partial class StellarisLexer : Lexer {
 	protected static DFA[] decisionToDFA;
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();

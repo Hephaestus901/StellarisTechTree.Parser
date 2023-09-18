@@ -11,7 +11,7 @@ public static class ObjectExtensions
             return decimalValue;
         }
 
-        var numberFormat = new NumberFormatInfo()
+        var numberFormat = new NumberFormatInfo
         {
             NumberDecimalSeparator = ".",
             NegativeSign = "-"

@@ -14,7 +14,7 @@ public class VisitorFactory : IVisitorFactory
 
     public ArrayVisitor GetArrayVisitor() => new(_variableService);
 
-    public FileMapVisitor GetFileMapVisitor() => new(_variableService, false);
+    public FileMapVisitor GetFileMapVisitor() => new(_variableService);
     public FileMapVisitor GetVariableVisitor() => new(_variableService, true);
 
     public ValueVisitor GetValueVisitor() => new(_variableService);
