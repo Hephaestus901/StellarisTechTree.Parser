@@ -13,7 +13,7 @@ LOCALEIDENTIFIER
     ;
 
 BAREWORD
-   : [a-zA-Z][@a-zA-Z_0-9.%-:]*
+   : ([0-9_]+.)?[a-zA-Z][@a-zA-Z_0-9.%-:]*
    ;
    
 STRING

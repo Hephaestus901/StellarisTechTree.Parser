@@ -26,7 +26,8 @@ public class LocaleVisitor : StellarisLocaleBaseVisitor<Dictionary<string, strin
         }
     }
 
-    private Dictionary<string, string> FilterLocaleValues(StellarisLocaleParser.LocaleFileContext context,
+    private Dictionary<string, string> FilterLocaleValues(
+        StellarisLocaleParser.LocaleFileContext context,
         Predicate<string> condition)
     {
         var result = new Dictionary<string, string>();
