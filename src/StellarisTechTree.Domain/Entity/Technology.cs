@@ -11,6 +11,8 @@ public class Technology
     public string Area { get; init; } = string.Empty;
 
     public string Name { get; init; }
+    
+    public string Icon { get; init; }
 
     public decimal Cost { get; init; }
 
@@ -56,6 +58,7 @@ public class Technology
         Gateway = payloadValue.TryGetValue("gateway", out var rawGateway) && rawGateway is string gateway
             ? gateway
             : string.Empty;
+        Icon = payloadValue.TryGetValue("icon", out var rawIcon) && rawIcon is string icon ? icon : string.Empty;
 
         IsStartTech = payloadValue.TryGetValue("start_tech", out var rawStartTech) && rawStartTech is true;
         IsRare = payloadValue.TryGetValue("is_rare", out var rawIsRare) && rawIsRare is true;
