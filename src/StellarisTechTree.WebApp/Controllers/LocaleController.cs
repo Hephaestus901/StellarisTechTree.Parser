@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc;
 using StellarisTechTree.Application.Services;
 using StellarisTechTree.Infrastructure.Parsers;
 using StellarisTechTree.Infrastructure.Services.ContextService;
@@ -35,8 +36,9 @@ public class LocaleController : ControllerBase
                          x.Key.StartsWith("tech_", StringComparison.InvariantCultureIgnoreCase) ||
                          x.Key.StartsWith("ap_", StringComparison.InvariantCultureIgnoreCase) ||
                          x.Key.StartsWith("leader_trait_", StringComparison.InvariantCultureIgnoreCase) ||
+                         Regex.IsMatch(x.Key, @"^ethic_(fanatic_)?[A-Za-z]+\b") ||
                          x.Key.StartsWith("tr_", StringComparison.InvariantCultureIgnoreCase))
-                     .ToDictionary(pair => pair.Key, pair => pair.Value);
+                     .ToDictionary(pair => pair.Key.ToLowerInvariant(), pair => pair.Value);
         var haveChanges = true;
 
         while (result.Any(x => x.Value.StartsWith("$", StringComparison.InvariantCultureIgnoreCase)) && haveChanges)

@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StellarisTechTree.Applicati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StellarisTechTree.Infrastructure", "src\StellarisTechTree.Infrastructure\StellarisTechTree.Infrastructure.csproj", "{42A026CE-2F66-4CD8-8A15-3F7C591CF18D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DB47D89D-005D-42CD-82DB-805E16247FCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit", "test\Unit\Unit.csproj", "{159756DA-A130-4279-8A9A-D7135A2D93F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,12 @@ Global
 		{42A026CE-2F66-4CD8-8A15-3F7C591CF18D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42A026CE-2F66-4CD8-8A15-3F7C591CF18D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42A026CE-2F66-4CD8-8A15-3F7C591CF18D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{159756DA-A130-4279-8A9A-D7135A2D93F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{159756DA-A130-4279-8A9A-D7135A2D93F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{159756DA-A130-4279-8A9A-D7135A2D93F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{159756DA-A130-4279-8A9A-D7135A2D93F9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{159756DA-A130-4279-8A9A-D7135A2D93F9} = {DB47D89D-005D-42CD-82DB-805E16247FCB}
 	EndGlobalSection
 EndGlobal

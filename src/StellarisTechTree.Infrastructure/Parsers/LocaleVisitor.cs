@@ -34,7 +34,12 @@ public class LocaleVisitor : StellarisLocaleBaseVisitor<Dictionary<string, strin
         foreach (var valueContext in context.localeValue())
         {
             var name = valueContext.BAREWORD().GetText();
-            name = name.Remove(name.IndexOf(":", StringComparison.Ordinal));
+            var indexOfDivider = name.IndexOf(":", StringComparison.OrdinalIgnoreCase);
+            if (indexOfDivider != -1)
+            {
+                name = name.Remove(name.IndexOf(":", StringComparison.Ordinal));
+            }
+
             if (!condition(name))
             {
                 continue;
