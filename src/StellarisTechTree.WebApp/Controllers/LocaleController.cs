@@ -72,7 +72,7 @@ public class LocaleController : ControllerBase
 
         var result = localeValues
                      .Where(x => x.Key.StartsWith("tech_", StringComparison.InvariantCultureIgnoreCase))
-                     .ToDictionary(pair => pair.Key, pair => pair.Value);
+                     .ToDictionary(pair => pair.Key.ToLowerInvariant(), pair => pair.Value);
         var haveChanges = true;
 
         while (result.Any(x => x.Value.StartsWith("$", StringComparison.InvariantCultureIgnoreCase)) && haveChanges)
