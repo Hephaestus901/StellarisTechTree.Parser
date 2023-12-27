@@ -36,6 +36,14 @@ public class LocaleController : ControllerBase
                          x.Key.StartsWith("tech_", StringComparison.InvariantCultureIgnoreCase) ||
                          x.Key.StartsWith("ap_", StringComparison.InvariantCultureIgnoreCase) ||
                          x.Key.StartsWith("leader_trait_", StringComparison.InvariantCultureIgnoreCase) ||
+                         x.Key.StartsWith("starbase_", StringComparison.InvariantCulture) ||
+                         (x.Key.StartsWith("origin_") && !x.Key.Contains("effect") && !x.Key.Contains('.')) ||
+                         x.Key.StartsWith("pc_") ||
+                         x.Key.Equals("robots_outlawed_name", StringComparison.InvariantCultureIgnoreCase) ||
+                         x.Key.Equals("ai_outlawed", StringComparison.InvariantCultureIgnoreCase) ||
+                         x.Key.Equals("specialist_bulwark", StringComparison.InvariantCultureIgnoreCase) ||
+                         x.Key.Equals("specialist_scholarium", StringComparison.InvariantCultureIgnoreCase) ||
+                         x.Key.Equals("specialist_prospectorium", StringComparison.InvariantCultureIgnoreCase) ||
                          Regex.IsMatch(x.Key, @"^ethic_(fanatic_)?[A-Za-z]+\b") ||
                          x.Key.StartsWith("tr_", StringComparison.InvariantCultureIgnoreCase))
                      .ToDictionary(pair => pair.Key.ToLowerInvariant(), pair => pair.Value);
