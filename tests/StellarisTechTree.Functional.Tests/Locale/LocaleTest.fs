@@ -1,0 +1,26 @@
+﻿module StellarisTechTree.Functional.Tests.Locale.LocaleTest
+
+let LocaleTest =
+  """
+  l_english:
+    NEW_ACHIEVEMENT_2_1_NAME:0 "Digging Deep"
+    tech_mass_drivers_1:0 "Mass Drivers"
+    tech_mass_drivers_1_desc:0 "These electromagnetic projectile launchers use magnets to accelerate armor-piercing rounds towards targets at high speeds."
+    tech_mass_drivers_2:0 "Coilguns"
+    tech_mass_drivers_2_desc:0 "Coilguns are more powerful versions of the early mass drivers, using electromagnetic coils to rapidly accelerate projectiles towards targets."
+    tech_mass_drivers_3:0 "Railguns"
+    tech_mass_drivers_3_desc:0 "The latest in electromagnetic accelerators, railguns use twin parallel rails to fire projectiles at incredible speeds."
+    tech_mass_drivers_4:0 "Advanced Railguns"
+    tech_mass_drivers_4_desc:0 "A new version of the venerable railgun, with sturdier rails and an enhanced power supply. These weapons are even more powerful and accurate than their predecessors."
+    tech_mass_drivers_5:0 "Gauss Cannons"
+    tech_mass_drivers_5_desc:0 "This updated version of the old coilgun design is even more destructive than the latest railgun designs. It is capable of launching projectiles with incredible accuracy and speed."
+    tech_kinetic_artillery_1:0 "Kinetic Battery"
+    tech_kinetic_artillery_1_desc:0 "Very long-range artillery capable of hurling powerful rounds over extreme distances with a large degree of accuracy."
+    tech_kinetic_artillery_2:0 "Kinetic Artillery"
+    tech_kinetic_artillery_2_desc:0 "An even more powerful long-range, ship-based artillery cannon, equipped with a new barrel and an upgraded fire control computer."
+    tech_mass_accelerator_1:0 "Mega Cannon"
+    tech_mass_accelerator_1_desc:0 "An enormous mass accelerator cannon that can only be placed in a spinal mount and fires monstrously powerful rounds over vast distances."
+    tech_mass_accelerator_2:0 "Giga Cannon"
+    tech_mass_accelerator_2_desc:0 "An even more powerful mass accelerator cannon that can rip through even the toughest shields."
+    crisis.2010.desc.b:0 "Our sensors have registered a faint tachyon signal being transmitted across the galaxy between multiple hidden relay stations. Aside from adding a small amount of background noise in FTL transmissions on certain subspace frequencies, the signal has no apparent effect or purpose. The organics have code-named it the "§HGhost Signal§!."\n\nWe have commenced tracking protocols to locate its source, but as of yet, the signal is too weak. We may not have to wait much longer though, as it is growing in strength at an alarming rate."
+  """

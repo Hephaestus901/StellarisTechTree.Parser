@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+
+        <IsPackable>false</IsPackable>
+        <GenerateProgramFile>false</GenerateProgramFile>
+        <IsTestProject>true</IsTestProject>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Tech\TechTest.fs" />
+        <Compile Include="Tech\Tests.fs" />
+        <Compile Include="Locale\LocaleTest.fs" />
+        <Compile Include="Locale\Tests.fs" />
+        <Compile Include="Variable\VariableTest.fs" />
+        <Compile Include="Variable\Tests.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+        <PackageReference Include="xunit" Version="2.9.3" />
+        <PackageReference Remove="FSharp.Core" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\StellarisTechTree.Functional\StellarisTechTree.Functional.fsproj" />
+    </ItemGroup>
+
+</Project>
