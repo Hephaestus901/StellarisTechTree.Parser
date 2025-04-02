@@ -1,4 +1,7 @@
-﻿namespace StellarisTechTree.Domain.Extensions;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace StellarisTechTree.Domain.Extensions;
 
 public static class DictionaryExtensions
 {

@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StellarisTechTree.WebApp.Controllers;
 
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API")]
 public enum LocaleLanguage
 {
     [Display (Name = "braz_por")]

@@ -1,4 +1,5 @@
-﻿using Microsoft.FSharp.Collections;
+﻿using System.Collections.Generic;
+using Microsoft.FSharp.Collections;
 using StellarisTechTree.Functional;
 
 namespace StellarisTechTree.Application;

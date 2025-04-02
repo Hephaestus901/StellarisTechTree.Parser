@@ -11,8 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Antlr4.Runtime.Standard" Version="4.7.2" />
-        <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.3" />
     </ItemGroup>
 
 </Project>

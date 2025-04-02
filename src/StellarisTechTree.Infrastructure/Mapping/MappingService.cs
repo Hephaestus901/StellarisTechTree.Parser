@@ -1,4 +1,6 @@
-﻿using Microsoft.FSharp.Collections;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.FSharp.Collections;
 using StellarisTechTree.Application;
 using StellarisTechTree.Application.Services;
 using StellarisTechTree.Functional;
@@ -7,8 +9,6 @@ namespace StellarisTechTree.Infrastructure.Mapping;
 
 public class MappingService(IVariableService variableService) : IMappingService
 {
-    private readonly IVariableService _variableService = variableService;
-    
     public KeyValuePair<string, object> MapToObject(Types.Property parsedContent) =>
         MapProperty(parsedContent);
 
@@ -113,5 +113,5 @@ public class MappingService(IVariableService variableService) : IMappingService
     private static string GetStringValue(Types.TypeValue.StringValue stringValue) => stringValue.Item;
 
     private decimal GetVariableValue(Types.TypeValue.Variable variable) =>
-        _variableService.GetVariableValue(variable.Item);
+        variableService.GetVariableValue(variable.Item);
 }

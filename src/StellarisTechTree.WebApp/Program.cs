@@ -1,10 +1,12 @@
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using StellarisTechTree.Application;
 using StellarisTechTree.Application.Services;
 using StellarisTechTree.Infrastructure.Mapping;
 using StellarisTechTree.Infrastructure.Services;
 using StellarisTechTree.Infrastructure.Services.ContextService;
-using StellarisTechTree.Infrastructure.Services.VisitorFactory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +17,6 @@ builder.Services.AddSingleton<IVariableService, VariableService>();
 builder.Services.AddSingleton<IFileService, FileService>();
 builder.Services.AddSingleton<IContextService, ContextService>();
 builder.Services.AddSingleton<IMappingService, MappingService>();
-
-// scoped
-builder.Services.AddTransient<IVisitorFactory, VisitorFactory>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
