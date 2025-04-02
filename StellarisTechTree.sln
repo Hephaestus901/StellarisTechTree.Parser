@@ -1,5 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9D2260AB-B113-4FA3-B098-BB32F0D35FED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DB47D89D-005D-42CD-82DB-805E16247FCB}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StellarisTechTree.WebApp", "src\StellarisTechTree.WebApp\StellarisTechTree.WebApp.csproj", "{BFE24F1F-14D1-40D7-BA6E-11552801FDAB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StellarisTechTree.Domain", "src\StellarisTechTree.Domain\StellarisTechTree.Domain.csproj", "{2EEB047E-BF52-4CF7-9C7D-122ACA81E613}"
@@ -8,13 +12,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StellarisTechTree.Applicati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StellarisTechTree.Infrastructure", "src\StellarisTechTree.Infrastructure\StellarisTechTree.Infrastructure.csproj", "{42A026CE-2F66-4CD8-8A15-3F7C591CF18D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DB47D89D-005D-42CD-82DB-805E16247FCB}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "StellarisTechTree.Functional", "src\StellarisTechTree.Functional\StellarisTechTree.Functional.fsproj", "{347D8F0E-E255-4F5D-A2F7-A9CFCBDC53A4}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "StellarisTechTree.Functional", "StellarisTechTree.Functional\StellarisTechTree.Functional.fsproj", "{347D8F0E-E255-4F5D-A2F7-A9CFCBDC53A4}"
-EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "StellarisTechTree.Functional.Tests", "StellarisTechTree.Functional.Tests\StellarisTechTree.Functional.Tests.fsproj", "{F0847A71-640F-40BE-8FBA-1DFDAFEFC5EB}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9D2260AB-B113-4FA3-B098-BB32F0D35FED}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "StellarisTechTree.Functional.Tests", "tests\StellarisTechTree.Functional.Tests\StellarisTechTree.Functional.Tests.fsproj", "{F0847A71-640F-40BE-8FBA-1DFDAFEFC5EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

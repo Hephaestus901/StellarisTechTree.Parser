@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\StellarisTechTree.Functional\StellarisTechTree.Functional.fsproj" />
+      <ProjectReference Include="..\..\src\StellarisTechTree.Functional\StellarisTechTree.Functional.fsproj" />
     </ItemGroup>
 
 </Project>

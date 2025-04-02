@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\StellarisTechTree.Domain\StellarisTechTree.Domain.csproj" />
+      <ProjectReference Include="..\StellarisTechTree.Functional\StellarisTechTree.Functional.fsproj" />
     </ItemGroup>
 
 </Project>

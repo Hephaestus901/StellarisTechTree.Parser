@@ -5,8 +5,4 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\StellarisTechTree.Functional\StellarisTechTree.Functional.fsproj" />
-    </ItemGroup>
 </Project>
