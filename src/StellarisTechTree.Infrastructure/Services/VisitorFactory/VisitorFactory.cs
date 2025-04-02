@@ -12,12 +12,5 @@ public class VisitorFactory : IVisitorFactory
         _variableService = variableService;
     }
 
-    public ArrayVisitor GetArrayVisitor() => new(_variableService);
-
     public FileMapVisitor GetFileMapVisitor() => new(_variableService);
-    public FileMapVisitor GetVariableVisitor() => new(_variableService, true);
-
-    public ValueVisitor GetValueVisitor() => new(_variableService);
-
-    public PairVisitor GetPairVisitor() => new(_variableService);
 }

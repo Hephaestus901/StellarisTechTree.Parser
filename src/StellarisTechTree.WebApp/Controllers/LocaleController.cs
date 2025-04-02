@@ -1,104 +1,54 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.ComponentModel;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Extensions;
+using StellarisTechTree.Application;
 using StellarisTechTree.Application.Services;
-using StellarisTechTree.Infrastructure.Parsers;
+using StellarisTechTree.Functional;
 using StellarisTechTree.Infrastructure.Services.ContextService;
 
 namespace StellarisTechTree.WebApp.Controllers;
 
 [ApiController]
-[Route("[controller]/[action]/{language}")]
-public class LocaleController : ControllerBase
+[Route("[controller]/[action]")]
+public partial class LocaleController(
+    IFileService fileService,
+    IContextService contextService,
+    IMappingService mappingService)
+    : ControllerBase
 {
-    private readonly IFileService _fileService;
-    private readonly IContextService _contextService;
-
-    public LocaleController(IFileService fileService, IContextService contextService)
-    {
-        _fileService = fileService;
-        _contextService = contextService;
-    }
-
+    [GeneratedRegex(@"^ethic_(fanatic_)?[A-Za-z]+\b")]
+    private static partial Regex EthicRegex();
+    
+    /*
+     * TODO: добавить фильтрацию для дескрипшнов
+     * * если нужны дескрипшны - EndsWith("desc") || EndsWith("details")
+     * * если все кроме - !EndsWith("desc") && !EndsWith("details")
+     */
     [HttpGet]
-    public Dictionary<string, string> Get(string language)
-    {
-        var visitor = new LocaleVisitor(LocaleTopic.Names);
-        var files = _fileService.GetFiles($"Locales:{language}");
-
-        var localeValues = files
-                           .Select(_contextService.GetLocaleFileContext)
-                           .Select(visitor.VisitLocaleFile)
-                           .SelectMany(x => x)
-                           .ToDictionary(pair => pair.Key, pair => pair.Value);
-
-        var result = localeValues
-                     .Where(x =>
-                         x.Key.StartsWith("tech_", StringComparison.InvariantCultureIgnoreCase) ||
-                         x.Key.StartsWith("ap_", StringComparison.InvariantCultureIgnoreCase) ||
-                         x.Key.StartsWith("leader_trait_", StringComparison.InvariantCultureIgnoreCase) ||
-                         x.Key.StartsWith("starbase_", StringComparison.InvariantCulture) ||
-                         (x.Key.StartsWith("origin_") && !x.Key.Contains("effect") && !x.Key.Contains('.')) ||
-                         x.Key.StartsWith("pc_") ||
-                         x.Key.Equals("robots_outlawed_name", StringComparison.InvariantCultureIgnoreCase) ||
-                         x.Key.Equals("ai_outlawed", StringComparison.InvariantCultureIgnoreCase) ||
-                         x.Key.Equals("specialist_bulwark", StringComparison.InvariantCultureIgnoreCase) ||
-                         x.Key.Equals("specialist_scholarium", StringComparison.InvariantCultureIgnoreCase) ||
-                         x.Key.Equals("specialist_prospectorium", StringComparison.InvariantCultureIgnoreCase) ||
-                         Regex.IsMatch(x.Key, @"^ethic_(fanatic_)?[A-Za-z]+\b") ||
-                         x.Key.StartsWith("tr_", StringComparison.InvariantCultureIgnoreCase))
-                     .ToDictionary(pair => pair.Key.ToLowerInvariant(), pair => pair.Value);
-        var haveChanges = true;
-
-        while (result.Any(x => x.Value.StartsWith("$", StringComparison.InvariantCultureIgnoreCase)) && haveChanges)
-        {
-            haveChanges = false;
-            foreach (var pair in result)
-            {
-                if (!pair.Value.StartsWith('$') ||
-                    !localeValues.TryGetValue(pair.Value.Trim('$'), out var fixedValue))
-                {
-                    continue;
-                }
-
-                result[pair.Key] = fixedValue;
-                haveChanges = true;
-            }
-        }
-
-        return result;
-    }
-
-    [HttpGet]
-    public Dictionary<string, string> GetDescription(string language)
-    {
-        var visitor = new LocaleVisitor(LocaleTopic.Descriptions);
-        var files = _fileService.GetFiles($"Locales:{language}");
-        var localeValues = files.Select(_contextService.GetLocaleFileContext)
-                                .Select(visitor.VisitLocaleFile)
-                                .SelectMany(x => x)
-                                .ToDictionary(pair => pair.Key, pair => pair.Value);
-
-        var result = localeValues
-                     .Where(x => x.Key.StartsWith("tech_", StringComparison.InvariantCultureIgnoreCase))
-                     .ToDictionary(pair => pair.Key.ToLowerInvariant(), pair => pair.Value);
-        var haveChanges = true;
-
-        while (result.Any(x => x.Value.StartsWith("$", StringComparison.InvariantCultureIgnoreCase)) && haveChanges)
-        {
-            haveChanges = false;
-            foreach (var pair in result)
-            {
-                if (!pair.Value.StartsWith('$') ||
-                    !localeValues.TryGetValue(pair.Value.Trim('$'), out var fixedValue))
-                {
-                    continue;
-                }
-
-                result[pair.Key] = fixedValue;
-                haveChanges = true;
-            }
-        }
-
-        return result;
-    }
+    [Route("{language}")]
+    public Dictionary<string, string> GetFunctional(LocaleLanguage language) =>
+        fileService
+            .GetFiles($"Locales:{language.GetDisplayName()}")
+            .AsParallel()
+            .Select(contextService.GetFileContent)
+            .Select(LocaleParser.getParsingResult)
+            .Where(x => x.IsOk)
+            .Select(x => mappingService.MapToObject(x.ResultValue))
+            .SelectMany(x => x)
+            .Where(x =>
+                x.Key.StartsWith("tech_", StringComparison.InvariantCultureIgnoreCase) ||
+                x.Key.StartsWith("ap_", StringComparison.InvariantCultureIgnoreCase) ||
+                x.Key.StartsWith("leader_trait_", StringComparison.InvariantCultureIgnoreCase) ||
+                x.Key.StartsWith("starbase_", StringComparison.InvariantCulture) ||
+                (x.Key.StartsWith("origin_") && !x.Key.Contains("effect") && !x.Key.Contains('.')) ||
+                x.Key.StartsWith("pc_") ||
+                x.Key.Equals("robots_outlawed_name", StringComparison.InvariantCultureIgnoreCase) ||
+                x.Key.Equals("ai_outlawed", StringComparison.InvariantCultureIgnoreCase) ||
+                x.Key.Equals("specialist_bulwark", StringComparison.InvariantCultureIgnoreCase) ||
+                x.Key.Equals("specialist_scholarium", StringComparison.InvariantCultureIgnoreCase) ||
+                x.Key.Equals("specialist_prospectorium", StringComparison.InvariantCultureIgnoreCase) ||
+                EthicRegex().IsMatch(x.Key) ||
+                x.Key.StartsWith("tr_", StringComparison.InvariantCultureIgnoreCase))
+            .ToDictionary();
 }

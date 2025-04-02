@@ -11,35 +11,30 @@ public class Technology
     public string Area { get; init; } = string.Empty;
 
     public string Name { get; init; }
-    
+
     public string Icon { get; init; }
 
+    [JsonPropertyName("start_tech")] public bool IsStartTech { get; init; }
+
+    [JsonPropertyName("is_rare")] public bool IsRare { get; init; }
+
     public decimal Cost { get; init; }
-
-    [JsonPropertyName("start_tech")]
-    public bool IsStartTech { get; init; }
-
-    [JsonPropertyName("is_rare")]
-    public bool IsRare { get; init; }
 
     public decimal Tier { get; init; }
 
     public decimal Weight { get; init; }
 
     public string Gateway { get; init; } = string.Empty;
-    
-    [JsonPropertyName("is_event")]
-    public bool IsEvent { get; init; }
-    
-    [JsonPropertyName("is_dangerous")]
-    public bool IsDangerous { get; init; }
+
+    [JsonPropertyName("is_event")] public bool IsEvent { get; init; }
+
+    [JsonPropertyName("is_dangerous")] public bool IsDangerous { get; init; }
 
     public ReadOnlyCollection<string> Category { get; init; } = new(Array.Empty<string>());
 
     public ReadOnlyCollection<string> Prerequisites { get; init; } = new(Array.Empty<string>());
 
-    [JsonPropertyName("weight_modifier")]
-    public Dictionary<string, object> WeightModifier { get; init; } = new();
+    [JsonPropertyName("weight_modifier")] public Dictionary<string, object> WeightModifier { get; init; } = new();
 
     public Dictionary<string, object> Modifier { get; init; } = new();
 
@@ -64,11 +59,9 @@ public class Technology
         IsRare = payloadValue.TryGetValue("is_rare", out var rawIsRare) && rawIsRare is true;
         IsDangerous = payloadValue.TryGetValue("is_dangerous", out var rawIsDangerous) && rawIsDangerous is true;
 
-        Cost = payloadValue.TryGetValue("cost", out var rawCost) && rawCost is decimal cost ? cost : default;
-        Tier = payloadValue.TryGetValue("tier", out var rawTier) && rawTier is decimal tier ? tier : default;
-        Weight = payloadValue.TryGetValue("weight", out var rawWeight) && rawWeight is decimal weight
-            ? weight
-            : default;
+        Cost = GetDecimalOrDefault(payloadValue, "cost");
+        Tier = GetDecimalOrDefault(payloadValue, "tier");
+        Weight = GetDecimalOrDefault(payloadValue, "weight");
 
         Prerequisites = payloadValue.TryGetValue("prerequisites", out var rawPrereqs) && rawPrereqs is object[] prereqs
             ? new ReadOnlyCollection<string>(prereqs.Select(x => x.ToString()!).ToArray())
@@ -99,5 +92,20 @@ public class Technology
         {
             Children = new ReadOnlyCollection<Technology>(Children.Concat(new[] { technology }).ToArray());
         }
+    }
+
+    public decimal GetDecimalOrDefault(Dictionary<string, object> dictionary, string key)
+    {
+        if (!dictionary.TryGetValue(key, out var value))
+        {
+            return default;
+        }
+
+        if (value is decimal decimalValue)
+        {
+            return decimalValue;
+        }
+
+        return decimal.TryParse(value.ToString(), out var parsedValue) ? parsedValue : default;
     }
 }

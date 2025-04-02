@@ -20,8 +20,12 @@ public class TechnologyRoot
     {
         foreach (var rawTech in RawTech)
         {
-            var parent = GetClosestParent(rawTech,
-                rawTech.Prerequisites.Select(GetTech).Where(x => x != null).ToList()!);
+            var parent = GetClosestParent(
+                rawTech,
+                rawTech.Prerequisites
+                    .Select(GetTech)
+                    .Where(x => x != null)
+                    .ToList()!);
             parent?.AddChild(rawTech);
 
             if (rawTech.IsStartTech || !rawTech.Prerequisites.Any())
