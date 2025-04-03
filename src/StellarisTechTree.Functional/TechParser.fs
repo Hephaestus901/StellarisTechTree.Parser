@@ -5,7 +5,6 @@ open Primitives
 open System
 open System.Text.RegularExpressions
 open StellarisTechTree.Functional.Types
-open Types
 
 module TechParser =
     let (<!>) (p: Parser<_, _>) label : Parser<_, _> =

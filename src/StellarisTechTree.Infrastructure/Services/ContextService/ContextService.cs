@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace StellarisTechTree.Infrastructure.Services.ContextService;
+﻿namespace StellarisTechTree.Infrastructure.Services.ContextService;
 
 public class ContextService : IContextService
 {

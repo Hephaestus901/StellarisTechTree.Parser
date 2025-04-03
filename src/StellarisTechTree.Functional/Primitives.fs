@@ -2,7 +2,6 @@
 
 open FParsec
 open StellarisTechTree.Functional.Types
-open Types
 
 module Primitives =
     let internal ws: Parser<unit, unit> = skipChar ' '

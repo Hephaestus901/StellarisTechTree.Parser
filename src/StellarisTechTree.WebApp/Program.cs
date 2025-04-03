@@ -1,7 +1,4 @@
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using StellarisTechTree.Application;
 using StellarisTechTree.Application.Services;
 using StellarisTechTree.Infrastructure.Mapping;
