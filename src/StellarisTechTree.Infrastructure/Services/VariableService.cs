@@ -44,7 +44,7 @@ public class VariableService : IVariableService
             .Select(_contextService.GetFileContent)
             .Select(x =>
             {
-                var text = CommentRegex.Replace(x, string.Empty);
+                var text = CommentRegex.Replace(x.Content, string.Empty);
                 var matches = VariableRegex.Matches(text);
                 return string.Join(string.Empty, matches.Select(m => m.Value));
             })

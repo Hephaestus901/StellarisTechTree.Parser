@@ -1,5 +1,6 @@
 ﻿namespace StellarisTechTree.Functional
 
+open System.Collections.Generic
 open FParsec
 open Primitives
 open System
@@ -14,51 +15,57 @@ module TechParser =
             printfn $"%A{stream.Position}: Leaving %s{label} (%A{reply.Status})"
             reply
 
-    let public words = pchar '"' >>. many1CharsTill anyChar (pchar '"') <!> "words"
+    let private numberFormat =
+        NumberLiteralOptions.AllowMinusSign ||| NumberLiteralOptions.AllowFraction
 
-    let public singleWord =
-        opt (skipChar '"') >>. many1CharsTill anyChar (skipChar '"' <|> spaces1 <|> eof)
-        <!> "singleWord"
+    let public singleWord: Parser<string, unit> =
+        manyChars (letter <|> digit <|> anyOf [ '_'; '/' ]) <!> "singleWord"
 
-    let public stringValue =
-        choice [ attempt words; attempt singleWord ] .>> opt (skipChar '"')
-        <!> "stringValue"
+    let public manyWords: Parser<string, unit> =
+        quote >>. stringsSepBy singleWord (pstring " ")  .>> quote .>> opt eof
+        <!> "manyWords"
+
+    /// opt skip start
+    let public stringValue: Parser<TypeValue, unit> =
+        spaces >>. choice [ attempt manyWords; attempt singleWord ] <!> "stringValue"
         |>> fun x ->
             match x with
             | "yes" -> TypeValue.BooleanValue true
             | "no" -> TypeValue.BooleanValue false
             | any -> TypeValue.StringValue any
 
+    /// opt skip start
     let public variable =
-        pstring "@" .>>. singleWord <!> "variable"
-        |>> (fun (a, b) -> $"{a}{b}")
+        spaces >>. pchar '@' >>. singleWord <!> "variable"
+        |>> fun x -> $"@{x}"
         |>> TypeValue.Variable
 
-    let private numberFormat =
-        NumberLiteralOptions.AllowMinusSign ||| NumberLiteralOptions.AllowFraction
-
+    /// opt skip start
     let public digitValue =
-        numberLiteral numberFormat "number" <!> "digitValue"
+        spaces >>. numberLiteral numberFormat "number" <!> "digitValue"
         |>> fun nl ->
             if nl.IsInteger then
                 TypeValue.IntValue(int32 nl.String)
             else
                 TypeValue.FloatValue(float nl.String)
 
+    /// opt skip start
     let public propertyValue =
-        choice [ attempt variable; attempt digitValue; attempt stringValue ]
+        spaces >>. choice [ attempt variable; attempt digitValue; attempt stringValue ]
         <!> "propertyValue"
 
     let public listOfStrings =
-        skipString "{" >>. manyTill (spaces >>. propertyValue .>> spaces) (skipString "}")
-        .>> opt spaces
+        spaces
+        >>. openingBracketLiteral
+        >>. manyTill (propertyValue .>> spaces) closingBracketLiteral
         <!> "listOfStrings"
 
+    /// opt skip start
     let public nameIdentifier =
-        spaces >>. singleWord .>> equalsSign .>> spaces <!> "nameIdentifier" |>> Name
+        spaces >>. singleWord .>> spaces .>> equalsSign <!> "nameIdentifier" |>> Name
 
     let public comparatorIdentifier =
-        spaces >>. singleWord .>>. conditionChar .>> ws <!> "comparatorIdentifier"
+        spaces >>. singleWord .>> spaces .>>. conditionChar <!> "comparatorIdentifier"
         |>> Comparator
 
     let public identifier =
@@ -68,46 +75,60 @@ module TechParser =
         <!> "identifier"
 
     let public property =
-        identifier .>>. propertyValue .>> spaces <!> "property"
-        |>> Property.SingleProperty
+        identifier .>>. propertyValue <!> "property" |>> Property.SingleProperty
+    
+    let public plainArrayValue =
+        spaces >>. propertyValue <!> "plainArrayValue" |>> ArrayValue.PlainArrayValue
+    
+    let public complexArrayValue =
+        nameIdentifier .>>. listOfStrings <!> "arrayProperty" |>> ArrayValue.ComplexArray 
 
-    let public arrayProperty =
-        nameIdentifier .>>. listOfStrings .>> opt spaces <!> "arrayProperty"
-        |>> ArrayProperty
-
-    let public plainObjectProperty =
-        identifier .>> openingBracketLiteral
-        .>>. opt (many (choice [ attempt arrayProperty; attempt property ]))
-        .>> closingBracketLiteral
-        <!> "plainObjectProperty"
-        |>> fun (id, value) ->
-            if value.IsSome then
-                Property.ObjectProperty(id.getName (), value.Value)
-            else
-                id.getName () |> EmptyObject
-
-    let public objProperty, private objPropertyImpl: Parser<Property, unit> * Parser<Property, unit> ref =
+    let public arrayValues = choice [attempt complexArrayValue; attempt plainArrayValue]
+    
+    let public complexArrayProperty, private complexArrayPropertyImpl : Parser<Property, unit> *
+                                                                         Parser<Property, unit> ref =
         createParserForwardedToRef ()
-
-    objPropertyImpl.Value <-
-        identifier .>> openingBracketLiteral
-        .>>. many (
-            choice
-                [ attempt objProperty
-                  attempt plainObjectProperty
-                  attempt arrayProperty
-                  attempt property ]
-        )
-        .>> closingBracketLiteral
-        <!> "objPropertyImpl"
+        
+    complexArrayPropertyImpl.Value <-
+        spaces >>. nameIdentifier
+        .>> spaces
+        .>> openingBracketLiteral
+        .>>. manyTill (arrayValues .>> spaces) closingBracketLiteral
+        <!> "complexArrayProperty"
+        |>> fun (id, value) -> Property.ArrayProperty(id, value )
+    
+    let public simpleObjectProperty =
+        identifier .>> ws .>> openingBracketLiteral
+        .>>. manyTill
+            (choice [ attempt complexArrayProperty; attempt property ]
+             .>> spaces)
+            closingBracketLiteral
+        <!> "simpleObjectProperty"
         |>> fun (id, value) -> Property.ObjectProperty(id.getName (), value)
 
-    let private matchResult result =
+    let public complexObjectProperty, private complexObjectPropertyImpl: Parser<Property, unit> *
+                                                                         Parser<Property, unit> ref =
+        createParserForwardedToRef ()
+
+    complexObjectPropertyImpl.Value <-
+        spaces >>. identifier .>> ws .>> openingBracketLiteral
+        .>>. manyTill
+            (choice
+                [ attempt complexObjectProperty
+                  attempt simpleObjectProperty
+                  attempt complexArrayProperty
+                  attempt property ]
+             .>> spaces)
+            closingBracketLiteral
+        <!> "complexObjectProperty"
+        |>> fun (id, value) -> Property.ObjectProperty(id.getName (), value)
+
+    let private matchResult (fileName: String) result =
         match result with
         | Success(result, _, _) -> Result.Ok result
-        | Failure(message, _, _) -> Result.Error message
+        | Failure(message, _, _) -> Result.Error $"Error in file {fileName}: {message}"
 
     let private parse file =
-        Regex.Replace(file, "#.+", String.Empty) |> run (many objProperty)
+        Regex.Replace(file, "#.+", String.Empty) |> run (many complexObjectProperty)
 
-    let public getParsingResult file = file |> parse |> matchResult
+    let public getParsingResult (file: String, fileName: String) = file |> parse |> (matchResult fileName)

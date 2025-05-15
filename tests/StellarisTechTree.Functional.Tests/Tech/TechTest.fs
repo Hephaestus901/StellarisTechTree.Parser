@@ -274,3 +274,74 @@ let techRiftSphere = """tech_rift_sphere = {
 		has_astral_planes_dlc = yes
 	}
 }"""
+
+let techJuggernaut = """tech_juggernaut = {
+	cost = @tier5cost3
+	area = engineering
+    has_resource = {
+        type = minor_artifacts
+        amount > 0
+    }
+	category = { voidcraft }
+	tier = 5
+	prerequisites = {
+		tech_starbase_5
+		OR = {
+			tech_battleships
+			tech_harbinger_growth_2
+		}
+	}
+	weight = @tier5weight3
+	is_rare = yes
+
+	potential = {
+		host_has_dlc = "Federations"
+	}
+
+	technology_swap = {
+		name = tech_biogenesis_juggernaut
+		inherit_icon = no
+		inherit_effects = yes
+
+		trigger = {
+			country_uses_bio_ships = yes
+		}
+		area = society
+		category = { biology }
+	}
+
+	weight_modifier = {
+		factor = 0.25
+		modifier = {
+			factor = 1.5
+			OR = {
+				has_trait_in_council = { TRAIT = leader_trait_curator }
+				has_trait_in_council = { TRAIT = leader_trait_maniacal }
+				has_trait_in_council = { TRAIT = leader_trait_maniacal_2 }
+				has_trait_in_council = { TRAIT = leader_trait_maniacal_3 }
+			}
+		}
+		inline_script = {
+			script = technologies/rare_technologies_weight_modifiers
+			TECHNOLOGY = tech_juggernaut
+		}
+		modifier = {
+			factor = 1.25
+			has_technology = "tech_titans"
+		}
+
+	}
+
+	prereqfor_desc = {
+		hide_prereq_for_desc = component
+		ship = {
+			title = "TECH_UNLOCK_JUGGERNAUT_CONSTRUCTION_TITLE"
+			desc = "TECH_UNLOCK_JUGGERNAUT_CONSTRUCTION_DESC"
+		}
+	}
+
+	ai_weight = {
+		factor = @ai_ship_types_factor
+
+	}
+}"""

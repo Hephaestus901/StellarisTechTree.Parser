@@ -19,7 +19,8 @@ public class MappingService(IVariableService variableService) : IMappingService
             return MapObjectProperty((property as Types.Property.ObjectProperty)!);
 
         if (property.IsArrayProperty)
-            return MapArrayProperty((property as Types.Property.ArrayProperty)!);
+            // return MapArrayProperty((property as Types.Property.ArrayProperty)!);
+            return new KeyValuePair<string, object>();
 
         return MapSingleProperty((property as Types.Property.SingleProperty)!);
     }
@@ -66,9 +67,9 @@ public class MappingService(IVariableService variableService) : IMappingService
         return new KeyValuePair<string, object>(name, GetValueFromTypeValue(singleProperty.Item2));
     }
 
-    private KeyValuePair<string, object> MapArrayProperty(Types.Property.ArrayProperty arrayProperty) =>
-        new(arrayProperty.Item1,
-            arrayProperty.Item2.Select(GetValueFromTypeValue).ToArray());
+    // private KeyValuePair<string, object> MapArrayProperty(Types.Property.ArrayProperty arrayProperty) =>
+    //     new(arrayProperty.Item1,
+    //         arrayProperty.Item2.Select(GetValueFromTypeValue).ToArray());
 
     private static string GetNameFromIdentifier(Types.Identifier identifier) =>
         identifier.IsNameIdentifier

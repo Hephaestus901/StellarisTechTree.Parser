@@ -22,9 +22,13 @@ module Types =
         | IntValue of int32
         | FloatValue of float
     
+    type public ArrayValue =
+        | PlainArrayValue of TypeValue
+        | ComplexArray of Name * TypeValue list
+    
     type public Property =
         | SingleProperty of Identifier * TypeValue
-        | ArrayProperty of Name * TypeValue list
+        | ArrayProperty of Name * ArrayValue list
         | ObjectProperty of Name * Property list
         | EmptyObject of Name
         

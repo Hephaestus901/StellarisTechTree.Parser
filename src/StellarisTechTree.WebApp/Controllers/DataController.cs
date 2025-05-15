@@ -17,8 +17,9 @@ public class DataController(
     : ControllerBase
 {
     private IEnumerable<Technology> GetTechnologies() =>
-        fileService.GetFiles("Technologies").Select(contextService.GetFileContent)
-            .Select(TechParser.getParsingResult)
+        fileService.GetFiles("Technologies")
+            .Select(contextService.GetFileContent)
+            .Select(x => TechParser.getParsingResult(x.Content, x.FileName))
             .Select(x =>
             {
                 if (x.IsError)

@@ -7,21 +7,22 @@ open StellarisTechTree.Functional.Types
 open Xunit
 
 [<Theory>]
-[<InlineData "has_resource">]
-let ``singleWord tests`` (input: String) =
-    let parsingResult = run (many TechParser.singleWord) input
+[<InlineData("has_resource", "has_resource")>]
+let ``singleWord tests`` (input: String, expected: String) =
+    let parsingResult = run TechParser.singleWord input
 
     match parsingResult with
-    | ParserResult.Success(parsed, _, _) -> Assert.Equal(input, parsed[0])
+    | ParserResult.Success(parsed, _, _) -> Assert.Equal(expected, parsed)
     | ParserResult.Failure(error, _, _) -> Assert.Fail error
 
 [<Theory>]
-[<InlineData "Distant Stars Story Pack">]
-let ``words tests`` (input: String) =
-    let parsingResult = run TechParser.words $"\"{input}\""
+[<InlineData("\"Distant Stars Story Pack\"", "Distant Stars Story Pack")>]
+[<InlineData("\"tech_archaeostudies\" \}", "tech_archaeostudies")>]
+let ``words tests`` (input: String, expected: String) =
+    let parsingResult = run TechParser.manyWords input
 
     match parsingResult with
-    | ParserResult.Success(parsed, _, _) -> Assert.Equal(input, parsed)
+    | ParserResult.Success(parsed, _, _) -> Assert.Equal(expected, String.Join(" ", parsed))
     | ParserResult.Failure(error, _, _) -> Assert.Fail error
 
 [<Theory>]
@@ -37,10 +38,8 @@ let ``string value tests`` (input: String) =
     | ParserResult.Failure(error, _, _) -> Assert.Fail error
 
 [<Theory>]
-[<InlineData ("@test", "@test")>]
-[<InlineData ("""@tier2cost3
-area
-""", "@tier2cost3")>]
+[<InlineData("@test", "@test")>]
+[<InlineData("""@tier2cost3""", "@tier2cost3")>]
 let ``variable tests`` (input: String, expected: String) =
     let parsingResult = run TechParser.variable input
 
@@ -88,18 +87,47 @@ let ``property value test`` (input: String) =
     | ParserResult.Failure(error, _, _) -> Assert.Fail error
 
 [<Theory>]
-[<InlineData ("category = { \"field_manipulation\" }", "category")>]
-[<InlineData ("prerequisites = { \"tech_archaeostudies\" }", "prerequisites")>]
-[<InlineData ("""feature_flags = {
-	unlock_arcane_deciphering
-}""", "feature_flags")>]
-let ``array property test`` (input: String, expectedName: String) =
-    let parsingResult = run TechParser.arrayProperty input
+[<InlineData """prerequisites = {
+	tech_starbase_5
+	OR = {
+		tech_battleships
+		tech_harbinger_growth_2
+	}
+}
+""">]
+let ``array property test`` (input: String) =
+    let parsingResult = run TechParser.complexArrayProperty input
 
     match parsingResult with
     | ParserResult.Success(parsed, _, _) ->
         match parsed with
-        | ArrayProperty(name, _) -> Assert.Equal(expectedName, name)
+        | Property.ArrayProperty(name, values) ->
+            Assert.Equal("prerequisites", name)
+            Assert.Collection(
+                values,
+                (fun item ->
+                    match item with
+                    | PlainArrayValue value ->
+                        match value with
+                        | TypeValue.StringValue str -> Assert.Equal("tech_starbase_5", str)
+                        | _ -> Assert.Fail "tech_starBase_5"
+                    | ComplexArray _ -> Assert.Fail "tech_starbase_5"),
+                fun item ->
+                    match item with
+                    | ComplexArray (name, value) ->
+                        Assert.Equal("OR", name.ToString())
+                        Assert.Collection(
+                            value,
+                            (fun valItem ->
+                                match valItem with
+                                | TypeValue.StringValue str -> Assert.Equal("tech_battleships", str)
+                                | _ -> Assert.Fail "tech_battleships"),
+                            (fun valItem ->
+                                match valItem with
+                                | TypeValue.StringValue str -> Assert.Equal("tech_harbinger_growth_2", str)
+                                | _ -> Assert.Fail "tech_harbinger_growth_2")
+                        )
+                    | PlainArrayValue _ -> Assert.Fail "OR")
         | _ -> Assert.Fail "type mismatch"
     | ParserResult.Failure(error, _, _) -> Assert.Fail error
 
@@ -119,10 +147,10 @@ let ``name identifier tests`` (input: String, expected: String) =
 }
 """>]
 let ``plain obj tests`` (input: String) =
-    let parsingResult = run TechParser.plainObjectProperty input
-    
+    let parsingResult = run TechParser.simpleObjectProperty input
+
     match parsingResult with
-    | ParserResult.Success(parsed,_,_) -> Assert.Equal(true, true)
+    | ParserResult.Success(parsed, _, _) -> Assert.Equal(true, true)
     | ParserResult.Failure(error, _, _) -> Assert.Fail error
 
 [<Theory>]
@@ -153,7 +181,7 @@ let ``plain obj tests`` (input: String) =
 }
 """>]
 let ``All property tech test`` (input: String) =
-    let parsingResult = TechParser.getParsingResult input
+    let parsingResult = TechParser.getParsingResult ("all property tech test", input)
 
     match parsingResult with
     | Result.Ok _ -> Assert.Equal(true, true)
@@ -161,17 +189,19 @@ let ``All property tech test`` (input: String) =
 
 [<Theory>]
 [<InlineData "has_resource = { type = minor_artifacts amount > 0 }">]
+[<InlineData "tech_juggernaut = { category = { voidcraft }}">]
 let ``objProperty test`` (input: String) =
-    let parsingResult = run TechParser.objProperty input
+    let parsingResult = run TechParser.complexObjectProperty input
 
     match parsingResult with
     | ParserResult.Success(parsed, _, _) -> Assert.Equal("ObjectProperty", parsed.GetType().Name)
     | ParserResult.Failure(error, _, _) -> Assert.Fail error
-    
+
 [<Fact>]
-let ``tech test`` ()=
-    let parsingResult = TechParser.getParsingResult TechTest.techRiftSphere
+let ``tech test`` () =
+    let parsingResult =
+        TechParser.getParsingResult (TechTest.techJuggernaut, "tech test")
 
     match parsingResult with
-    | Result.Ok result -> Assert.Equal(true, true)
+    | Result.Ok result -> Assert.NotEqual(result.Length, 0)
     | Result.Error error -> Assert.Fail error

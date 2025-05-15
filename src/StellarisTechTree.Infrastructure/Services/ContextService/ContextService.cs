@@ -1,6 +1,8 @@
-﻿namespace StellarisTechTree.Infrastructure.Services.ContextService;
+﻿using StellarisTechTree.Domain.Entity;
+
+namespace StellarisTechTree.Infrastructure.Services.ContextService;
 
 public class ContextService : IContextService
 {
-    public string GetFileContent(string filePath) => File.ReadAllText(filePath);
+    public FileContent GetFileContent(string filePath) => new (filePath, File.ReadAllText(filePath));
 }

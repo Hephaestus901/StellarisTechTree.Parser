@@ -31,6 +31,7 @@ public partial class LocaleController(
             .GetFiles($"Locales:{language.GetDisplayName()}")
             .AsParallel()
             .Select(contextService.GetFileContent)
+            .Select(x => x.Content)
             .Select(LocaleParser.getParsingResult)
             .Where(x => x.IsOk)
             .Select(x => mappingService.MapToObject(x.ResultValue))
