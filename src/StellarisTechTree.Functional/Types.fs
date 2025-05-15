@@ -38,7 +38,9 @@ module Types =
     type public LocaleObject =
         | SingleProperty of Name * LocaleValue
         
-    type public VariableValue = float
+    type public VariableValue =
+        | IntValue of int32
+        | FloatValue of float
         
     type VariableObject = Name * VariableValue
 

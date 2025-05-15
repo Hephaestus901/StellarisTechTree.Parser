@@ -19,7 +19,7 @@ let ``singleWord tests`` (input: String, expected: String) =
 [<InlineData("\"Distant Stars Story Pack\"", "Distant Stars Story Pack")>]
 [<InlineData("\"tech_archaeostudies\" \}", "tech_archaeostudies")>]
 let ``words tests`` (input: String, expected: String) =
-    let parsingResult = run TechParser.manyWords input
+    let parsingResult = run TechParser.multipleWords input
 
     match parsingResult with
     | ParserResult.Success(parsed, _, _) -> Assert.Equal(expected, String.Join(" ", parsed))
@@ -28,7 +28,7 @@ let ``words tests`` (input: String, expected: String) =
 [<Theory>]
 [<InlineData "test">]
 let ``string value tests`` (input: String) =
-    let parsingResult = run TechParser.stringValue input
+    let parsingResult = run TechParser.stringOrBoolValue input
 
     match parsingResult with
     | ParserResult.Success(parsed, _, _) ->
@@ -41,7 +41,7 @@ let ``string value tests`` (input: String) =
 [<InlineData("@test", "@test")>]
 [<InlineData("""@tier2cost3""", "@tier2cost3")>]
 let ``variable tests`` (input: String, expected: String) =
-    let parsingResult = run TechParser.variable input
+    let parsingResult = run TechParser.variableValue input
 
     match parsingResult with
     | ParserResult.Success(parsed, _, _) ->
@@ -53,7 +53,7 @@ let ``variable tests`` (input: String, expected: String) =
 [<Theory>]
 [<InlineData("15", 15)>]
 let ``digit value Int32 tests `` (input: String, expected: Int32) =
-    let parsingResult = run TechParser.digitValue input
+    let parsingResult = run TechParser.numberBasedValue input
 
     match parsingResult with
     | ParserResult.Success(parsed, _, _) ->
@@ -65,7 +65,7 @@ let ``digit value Int32 tests `` (input: String, expected: Int32) =
 [<Theory>]
 [<InlineData("65.0", 65.0)>]
 let ``digit value Float tests `` (input: String, expected: float) =
-    let parsingResult = run TechParser.digitValue input
+    let parsingResult = run TechParser.numberBasedValue input
 
     match parsingResult with
     | ParserResult.Success(parsed, _, _) ->
@@ -80,7 +80,7 @@ let ``digit value Float tests `` (input: String, expected: float) =
 [<InlineData "area = society">]
 [<InlineData "is_rare = yes">]
 let ``property value test`` (input: String) =
-    let parsingResult = run TechParser.property input
+    let parsingResult = run TechParser.singleProperty input
 
     match parsingResult with
     | ParserResult.Success(parsed, _, _) -> Assert.Equal("SingleProperty", parsed.GetType().Name)
@@ -96,7 +96,7 @@ let ``property value test`` (input: String) =
 }
 """>]
 let ``array property test`` (input: String) =
-    let parsingResult = run TechParser.complexArrayProperty input
+    let parsingResult = run TechParser.arrayProperty input
 
     match parsingResult with
     | ParserResult.Success(parsed, _, _) ->

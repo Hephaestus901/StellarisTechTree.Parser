@@ -1,6 +1,5 @@
 ﻿namespace StellarisTechTree.Functional
 
-open System.Collections.Generic
 open FParsec
 open Primitives
 open System
@@ -8,59 +7,50 @@ open System.Text.RegularExpressions
 open StellarisTechTree.Functional.Types
 
 module TechParser =
+    /// Debug function
     let (<!>) (p: Parser<_, _>) label : Parser<_, _> =
         fun stream ->
-            printfn $"%A{stream.Position}: Entering %s{label}"
+            // printfn $"%A{stream.Position}: Entering %s{label}"
             let reply = p stream
-            printfn $"%A{stream.Position}: Leaving %s{label} (%A{reply.Status})"
+            // printfn $"%A{stream.Position}: Leaving %s{label} (%A{reply.Status})"
             reply
 
     let private numberFormat =
         NumberLiteralOptions.AllowMinusSign ||| NumberLiteralOptions.AllowFraction
-
+    
+    let public numberBasedValue =
+        spaces >>. numberLiteral numberFormat "number" <!> "numberBasedValue"
+        |>> fun nl ->
+            if nl.IsInteger then
+                TypeValue.IntValue(int32 nl.String)
+            else
+                TypeValue.FloatValue(float nl.String)
+    
     let public singleWord: Parser<string, unit> =
         manyChars (letter <|> digit <|> anyOf [ '_'; '/' ]) <!> "singleWord"
 
-    let public manyWords: Parser<string, unit> =
-        quote >>. stringsSepBy singleWord (pstring " ")  .>> quote .>> opt eof
+    let public multipleWords: Parser<string, unit> =
+        quote >>. stringsSepBy singleWord (pstring " ") .>> quote .>> opt eof
         <!> "manyWords"
 
-    /// opt skip start
-    let public stringValue: Parser<TypeValue, unit> =
-        spaces >>. choice [ attempt manyWords; attempt singleWord ] <!> "stringValue"
+    let public stringOrBoolValue: Parser<TypeValue, unit> =
+        spaces >>. choice [ attempt multipleWords; attempt singleWord ]
+        <!> "stringOrBoolValue"
         |>> fun x ->
             match x with
             | "yes" -> TypeValue.BooleanValue true
             | "no" -> TypeValue.BooleanValue false
             | any -> TypeValue.StringValue any
 
-    /// opt skip start
-    let public variable =
-        spaces >>. pchar '@' >>. singleWord <!> "variable"
+    let public variableValue =
+        spaces >>. pchar '@' >>. singleWord <!> "variableValue"
         |>> fun x -> $"@{x}"
         |>> TypeValue.Variable
 
-    /// opt skip start
-    let public digitValue =
-        spaces >>. numberLiteral numberFormat "number" <!> "digitValue"
-        |>> fun nl ->
-            if nl.IsInteger then
-                TypeValue.IntValue(int32 nl.String)
-            else
-                TypeValue.FloatValue(float nl.String)
+    let public propertyValueGateway =
+        choice [ attempt variableValue; attempt numberBasedValue; attempt stringOrBoolValue ]
+        <!> "propertyValueGateway"
 
-    /// opt skip start
-    let public propertyValue =
-        spaces >>. choice [ attempt variable; attempt digitValue; attempt stringValue ]
-        <!> "propertyValue"
-
-    let public listOfStrings =
-        spaces
-        >>. openingBracketLiteral
-        >>. manyTill (propertyValue .>> spaces) closingBracketLiteral
-        <!> "listOfStrings"
-
-    /// opt skip start
     let public nameIdentifier =
         spaces >>. singleWord .>> spaces .>> equalsSign <!> "nameIdentifier" |>> Name
 
@@ -68,41 +58,42 @@ module TechParser =
         spaces >>. singleWord .>> spaces .>>. conditionChar <!> "comparatorIdentifier"
         |>> Comparator
 
-    let public identifier =
+    let public identifierGateway =
         choice
             [ attempt nameIdentifier |>> NameIdentifier
               attempt comparatorIdentifier |>> ComparatorIdentifier ]
-        <!> "identifier"
+        <!> "identifierGateway"
 
-    let public property =
-        identifier .>>. propertyValue <!> "property" |>> Property.SingleProperty
-    
+    let public singleProperty =
+        identifierGateway .>>. propertyValueGateway <!> "singleProperty"
+        |>> Property.SingleProperty
+
     let public plainArrayValue =
-        spaces >>. propertyValue <!> "plainArrayValue" |>> ArrayValue.PlainArrayValue
-    
-    let public complexArrayValue =
-        nameIdentifier .>>. listOfStrings <!> "arrayProperty" |>> ArrayValue.ComplexArray 
+        spaces >>. propertyValueGateway <!> "plainArrayValue"
+        |>> ArrayValue.PlainArrayValue
 
-    let public arrayValues = choice [attempt complexArrayValue; attempt plainArrayValue]
-    
-    let public complexArrayProperty, private complexArrayPropertyImpl : Parser<Property, unit> *
-                                                                         Parser<Property, unit> ref =
+    let public complexArrayValue =
+        nameIdentifier .>> spaces .>> openingBracketLiteral
+        .>>. manyTill (propertyValueGateway .>> spaces) closingBracketLiteral
+        <!> "complexArrayValue"
+        |>> ArrayValue.ComplexArray
+
+    let public arrayValuesGateway =
+        choice [ attempt complexArrayValue; attempt plainArrayValue ]
+        <!> "arrayValuesGateway"
+
+    let public arrayProperty, private arrayPropertyImpl: Parser<Property, unit> * Parser<Property, unit> ref =
         createParserForwardedToRef ()
-        
-    complexArrayPropertyImpl.Value <-
-        spaces >>. nameIdentifier
-        .>> spaces
-        .>> openingBracketLiteral
-        .>>. manyTill (arrayValues .>> spaces) closingBracketLiteral
-        <!> "complexArrayProperty"
-        |>> fun (id, value) -> Property.ArrayProperty(id, value )
-    
+
+    arrayPropertyImpl.Value <-
+        spaces >>. nameIdentifier .>> spaces .>> openingBracketLiteral
+        .>>. manyTill (arrayValuesGateway .>> spaces) closingBracketLiteral
+        <!> "arrayProperty"
+        |>> fun (id, value) -> Property.ArrayProperty(id, value)
+
     let public simpleObjectProperty =
-        identifier .>> ws .>> openingBracketLiteral
-        .>>. manyTill
-            (choice [ attempt complexArrayProperty; attempt property ]
-             .>> spaces)
-            closingBracketLiteral
+        identifierGateway .>> ws .>> openingBracketLiteral
+        .>>. manyTill (choice [ attempt arrayProperty; attempt singleProperty ] .>> spaces) closingBracketLiteral
         <!> "simpleObjectProperty"
         |>> fun (id, value) -> Property.ObjectProperty(id.getName (), value)
 
@@ -111,13 +102,13 @@ module TechParser =
         createParserForwardedToRef ()
 
     complexObjectPropertyImpl.Value <-
-        spaces >>. identifier .>> ws .>> openingBracketLiteral
+        spaces >>. identifierGateway .>> ws .>> openingBracketLiteral
         .>>. manyTill
             (choice
                 [ attempt complexObjectProperty
                   attempt simpleObjectProperty
-                  attempt complexArrayProperty
-                  attempt property ]
+                  attempt arrayProperty
+                  attempt singleProperty ]
              .>> spaces)
             closingBracketLiteral
         <!> "complexObjectProperty"
